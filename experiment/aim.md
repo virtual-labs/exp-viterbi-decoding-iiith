@@ -2,6 +2,3 @@ In previous experiment you have calculated the transition and emission matrix, a
 
 <img src="images/viterbi-4.gif">
 
-#### Objective
-
-The objective of this experiment is to find POS tags of words in a sentence using Viterbi decoding.
