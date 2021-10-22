@@ -1,0 +1,1 @@
+- The objective of this experiment is to find POS tags of words in a sentence using Viterbi decoding.
