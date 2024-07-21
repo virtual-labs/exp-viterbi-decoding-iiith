@@ -12,11 +12,11 @@ $corpus=$_GET['corpus'];
 $fp=fopen("./Exp5/emission-transmission/".$corpus,"r");
 $cnt=0;
 $cnt1=0;
-$words=array();
-$pos=array();
-$emission_matrix=array();
-$transmission_matrix=array();
-$viterbi_matrix=array();
+$words=[];
+$pos=[];
+$emission_matrix=[];
+$transmission_matrix=[];
+$viterbi_matrix=[];
 $sentence="";
 array_push($pos,"eos");
 

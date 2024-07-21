@@ -65,7 +65,7 @@ function calculator($str){
 	return $str;
 }
 
-$viterbi = explode(",", $_GET['viterbi']);
+$viterbi = explode(",", (string) $_GET['viterbi']);
 $turn=$_GET['turn'];
 $flag=1;
 if($_GET['viterbi']=="%")
@@ -74,11 +74,11 @@ $corpus=$_GET['corpus'];
 $fp=fopen("./Exp5/emission-transmission/".$corpus,"r");
 $cnt=0;
 $cnt1=0;
-$words=array();
-$pos=array();
-$emission_matrix=array();
-$transmission_matrix=array();
-$viterbi_matrix=array();
+$words=[];
+$pos=[];
+$emission_matrix=[];
+$transmission_matrix=[];
+$viterbi_matrix=[];
 $sentence="";
 array_push($pos,"eos");
 
@@ -222,7 +222,7 @@ echo "<table align ='center' style=\"background-color:#FFD4A8;\" border=\"0\" id
 					$prob1_f=calculator($prob1);
 					$prob2_f=calculator($prob2);
 					}
-					catch(Exception $e){
+					catch(Exception){
 					$flag_chk=1;}
 					$prob1_f=(string)round($prob1_f,3);
 					$prob2_f=(string)round($prob2_f,3);
@@ -299,7 +299,7 @@ echo "<table align ='center' style=\"background-color:#FFD4A8;\" border=\"0\" id
 						$prob1_f=calculator($prob1);
 						$prob2_f=calculator($prob2);
 						}
-						catch(Exception $e){
+						catch(Exception){
 						$flag_chk=1;}
 						$prob1_f=(string)round($prob1_f,3);
 						$prob2_f=(string)round($prob2_f,3);
@@ -322,7 +322,7 @@ echo "<table align ='center' style=\"background-color:#FFD4A8;\" border=\"0\" id
 						{
 							echo "<td align='center'><input type='text' name='".$temp."' id='".$temp."' onclick=change(); style='width:30px;background-color:#FF0000";
 							echo "' align='center' value='";
-							if ($tmp==0 or strlen($prob1)==0)
+							if ($tmp==0 or strlen((string) $prob1)==0)
 								echo $prob1."'";
 							else
 								echo $prob1_f."'";

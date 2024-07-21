@@ -7,9 +7,9 @@
 <?php
 $corpus=$_GET['corpus'];
 $fp=fopen("./Exp5/emission-transmission/".$corpus,"r");
-$pos=array();
-$viterbi_matrix=array();
-$tag=array();
+$pos=[];
+$viterbi_matrix=[];
+$tag=[];
 $sentence="";
 array_push($pos,"eos");
 while(!feof($fp))
@@ -36,7 +36,7 @@ while(!feof($fp))
 
 $words=explode(" ",$sentence);
 
-$max=array();
+$max=[];
 for($i=0;$i<sizeof($words);$i=$i+1){
 	array_push($max,0);}
 
