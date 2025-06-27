@@ -1,0 +1,175 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "What is the main goal of chunking in Natural Language Processing?",
+      "answers": {
+        "a": "To divide a sentence into non-overlapping, meaningful groups of words",
+        "b": "To translate text from one language to another",
+        "c": "To generate random sentences",
+        "d": "To count the number of words in a sentence"
+      },
+      "explanations": {
+        "a": "Correct! Chunking segments a sentence into non-overlapping groups (chunks) like noun phrases or verb phrases, which are meaningful units.",
+        "b": "Incorrect. Translation is not the goal of chunking.",
+        "c": "Incorrect. Chunking is not about generating sentences.",
+        "d": "Incorrect. Chunking is not about counting words."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which of the following is an example of a chunk in the sentence: 'The quick brown fox jumps'?",
+      "answers": {
+        "a": "The quick brown fox",
+        "b": "jumps",
+        "c": "The",
+        "d": "quick brown"
+      },
+      "explanations": {
+        "a": "Correct! 'The quick brown fox' is a noun phrase chunk.",
+        "b": "Correct! 'jumps' is a verb phrase chunk.",
+        "c": "Incorrect. 'The' alone is not a chunk, but part of a larger chunk.",
+        "d": "Incorrect. 'quick brown' is not a complete chunk by itself."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Which machine learning models are commonly used for chunking in this experiment?",
+      "answers": {
+        "a": "Hidden Markov Model (HMM)",
+        "b": "Conditional Random Field (CRF)",
+        "c": "Both HMM and CRF",
+        "d": "Neural Networks only"
+      },
+      "explanations": {
+        "a": "Partially correct. HMM is used, but so is CRF.",
+        "b": "Partially correct. CRF is used, but so is HMM.",
+        "c": "Correct! Both HMM and CRF are used in this experiment to build chunkers.",
+        "d": "Incorrect. Neural networks are not the focus of this experiment."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What is the effect of increasing the size of the training corpus on chunking accuracy?",
+      "answers": {
+        "a": "Accuracy generally increases",
+        "b": "Accuracy generally decreases",
+        "c": "Accuracy stays the same",
+        "d": "There is no effect"
+      },
+      "explanations": {
+        "a": "Correct! More training data usually helps the model learn better, increasing accuracy (up to a point).",
+        "b": "Incorrect. More data usually helps, not hurts, accuracy.",
+        "c": "Incorrect. Accuracy typically improves with more data.",
+        "d": "Incorrect. Training corpus size does affect accuracy."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Which feature set is likely to give the best chunking accuracy?",
+      "answers": {
+        "a": "Only lexicon",
+        "b": "Only part-of-speech (POS)",
+        "c": "Both lexicon and POS",
+        "d": "Random features"
+      },
+      "explanations": {
+        "a": "Incorrect. Lexicon alone is useful, but combining features is better.",
+        "b": "Incorrect. POS alone is useful, but combining features is better.",
+        "c": "Correct! Using both lexical and POS features provides richer information and usually results in higher accuracy.",
+        "d": "Incorrect. Random features do not help chunking accuracy."
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Why might a CRF model outperform an HMM model for chunking?",
+      "answers": {
+        "a": "CRF can use more complex and global features",
+        "b": "CRF ignores the input sequence",
+        "c": "HMM always overfits",
+        "d": "HMM cannot be used for chunking"
+      },
+      "explanations": {
+        "a": "Correct! CRFs can incorporate a wider range of features and dependencies, making them more flexible and often more accurate for chunking.",
+        "b": "Incorrect. CRF does not ignore the input sequence; it models it more flexibly.",
+        "c": "Incorrect. HMMs do not always overfit, but they are less flexible than CRFs.",
+        "d": "Incorrect. HMMs can be used for chunking, but may not perform as well as CRFs."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "What is a key difference between chunking and full parsing?",
+      "answers": {
+        "a": "Chunking finds non-overlapping groups, full parsing finds complete syntactic structure",
+        "b": "Chunking is slower than full parsing",
+        "c": "Full parsing ignores word order",
+        "d": "Chunking is only used for English"
+      },
+      "explanations": {
+        "a": "Correct! Chunking identifies non-overlapping, non-recursive groups (chunks), while full parsing builds a complete syntactic tree.",
+        "b": "Incorrect. Chunking is usually faster than full parsing.",
+        "c": "Incorrect. Full parsing is sensitive to word order.",
+        "d": "Incorrect. Chunking is used for many languages."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Suppose your chunker is not performing well. Which of the following is LEAST likely to help improve its accuracy?",
+      "answers": {
+        "a": "Adding more labeled training data",
+        "b": "Using richer features (e.g., combining lexicon and POS)",
+        "c": "Randomly shuffling the labels in the training data",
+        "d": "Switching from HMM to CRF"
+      },
+      "explanations": {
+        "a": "Incorrect. More labeled data usually helps.",
+        "b": "Incorrect. Richer features usually help.",
+        "c": "Correct! Randomly shuffling the labels will harm, not help, accuracy.",
+        "d": "Incorrect. Switching to a more flexible model like CRF can help."
+      },
+      "correctAnswer": "c",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "In the context of chunking, what does a 'feature' refer to?",
+      "answers": {
+        "a": "A property or attribute of a word or its context used by the model",
+        "b": "A type of chunk",
+        "c": "A sentence in the training data",
+        "d": "A random number"
+      },
+      "explanations": {
+        "a": "Correct! Features are properties (like the word itself, its POS tag, or neighboring words/tags) used by the model to make predictions.",
+        "b": "Incorrect. Features are not types of chunks.",
+        "c": "Incorrect. Features are not sentences.",
+        "d": "Incorrect. Features are not random numbers."
+      },
+      "correctAnswer": "a",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "Which of the following best describes a 'chunk' in NLP?",
+      "answers": {
+        "a": "A non-overlapping, non-recursive group of words forming a meaningful unit",
+        "b": "A single word only",
+        "c": "A random group of words",
+        "d": "A full syntactic tree"
+      },
+      "explanations": {
+        "a": "Correct! A chunk is a non-overlapping, non-recursive group of words, such as a noun phrase or verb phrase.",
+        "b": "Incorrect. Chunks can be more than one word.",
+        "c": "Incorrect. Chunks are not random groups, but meaningful units.",
+        "d": "Incorrect. Chunks are not full syntactic trees."
+      },
+      "correctAnswer": "a",
+      "difficulty": "advanced"
+    }
+  ]
+}
