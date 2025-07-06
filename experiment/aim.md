@@ -1,4 +1,6 @@
-In previous experiment you have calculated the transition and emission matrix, and now in this experiment it will be used to find the POS tag sequence for a given sentence. When we have emission and transition matrix, various algorithms can be applied to find out the POS tags for words. Some of possible algorithms are: Backward algorithm, forward algorithm and viterbi algorithm. Here, in this experiment, you can get familiar with Viterbi Decoding
+### Aim
 
-<img src="images/viterbi-4.gif">
+The aim of this experiment is to understand and apply the Viterbi algorithm for Part-of-Speech (POS) tagging in Natural Language Processing (NLP). Learners will use emission and transition matrices derived from a training corpus to decode the most probable sequence of POS tags for a given test sentence. The experiment provides an interactive simulation to practice and visualize the Viterbi decoding process.
+
+<img src="images/viterbi-4.gif" alt="Viterbi Decoding Animation" style="display:block;margin:auto;max-width:400px;">
 

@@ -3,17 +3,30 @@
 // Load corpora.json and populate dropdown
 $(document).ready(function() {
     $.getJSON('data/corpora.json', function(corpora) {
-        var $select = $('<select name="option" id="corpus-select"><option value="">---Select Corpus---</option></select>');
+        // Remove sim-button from select, use default styling
+        var $select = $('<select name="option" id="corpus-select" style="min-width:180px;max-width:100%;"></select>');
+        $select.append('<option value="">---Select Corpus---</option>');
         corpora.forEach(function(corpus, idx) {
             $select.append('<option value="' + corpus.filename + '">' + corpus.label + '</option>');
         });
-        $('#corpus').html($select);
+        // Wrap in a div with simulation-step class for styling
+        $('#corpus').html('<div class="simulation-step">Corpus Selection:<br/></div>');
+        $('#corpus .simulation-step').append($select);
+        $('#full-sentence').html('');
         $('#fldiv').html('');
+        $('#matrices-pane').html('');
+
+        // Select Corpus A by default and trigger change
+        setTimeout(function() {
+            $select.val('corpus1').trigger('change');
+        }, 0);
 
         $select.on('change', function() {
             const selected = $(this).val();
             if (!selected) {
+                $('#full-sentence').html('');
                 $('#fldiv').html('');
+                $('#matrices-pane').html('');
                 return;
             }
             // Reset all state
@@ -25,10 +38,24 @@ $(document).ready(function() {
                 url: 'data/' + selected,
                 dataType: 'text',
                 success: function(data) {
-                    renderSimulation(parseCorpus(data));
+                    const corpusObj = parseCorpus(data);
+                    // Render full sentence in left pane
+                    $('#full-sentence').html('<div class="sim-section-title" style="margin-bottom:8px;">Full Sentence:</div>' +
+                        '<div class="sim-sentence" style="margin-bottom:18px;">' + corpusObj.fullSentence + '</div>');
+                    // Render matrices in right pane
+                    $('#matrices-pane').html(
+                        '<div class="sim-section-title">Emission Matrix</div>' +
+                        renderMatrixTable(corpusObj.emission, corpusObj.pos, corpusObj.words) +
+                        '<div class="sim-section-title" style="margin-top:18px;">Transition Matrix</div>' +
+                        renderMatrixTable(corpusObj.transition, corpusObj.pos, corpusObj.pos)
+                    );
+                    // Render simulation in middle pane
+                    renderSimulation(corpusObj);
                 },
                 error: function() {
+                    $('#full-sentence').html('');
                     $('#fldiv').html('<p style="color:red;">Failed to load corpus file.</p>');
+                    $('#matrices-pane').html('');
                 }
             });
         });
@@ -104,6 +131,76 @@ function parseCorpus(data) {
     .sim-pos-tag { color: #008800; font-style: normal; }
     .sim-collapsible { display: none; }
     .sim-collapsible.open { display: block; }
+    .sim-info-icon {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #0074d9;
+      color: #fff;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1em;
+      line-height: 20px;
+      margin-left: 8px;
+      cursor: pointer;
+      position: relative;
+    }
+    .sim-info-icon:focus {
+      outline: 2px solid #005fa3;
+    }
+    .sim-info-tooltip {
+      visibility: hidden;
+      opacity: 0;
+      background: #222;
+      color: #fff;
+      text-align: center;
+      border-radius: 4px;
+      padding: 4px 10px;
+      position: absolute;
+      z-index: 10;
+      left: 110%;
+      top: 50%;
+      transform: translateY(-50%);
+      white-space: nowrap;
+      font-size: 0.95em;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+    .sim-info-icon:hover .sim-info-tooltip, .sim-info-icon:focus .sim-info-tooltip {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .sim-info-modal-bg {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.25);
+      align-items: center;
+      justify-content: center;
+    }
+    .sim-info-modal {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 16px #0003;
+      max-width: 500px;
+      padding: 24px 28px;
+      margin: 40px auto;
+      font-size: 1.05em;
+      position: relative;
+    }
+    .sim-info-modal-close {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 1.3em;
+      color: #0074d9;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
     `;
     document.head.appendChild(style);
 })();
@@ -127,46 +224,41 @@ function renderSimulation(corpus) {
     userAnswers = [];
     currentCorpus = corpus;
     currentTurn = 1;
-    let html = '<div class="sim-card">';
-    // Show the full sentence at the top
-    html += '<div class="sim-section-title" style="margin-bottom:8px;">Full Sentence:</div>';
-    html += '<div class="sim-sentence" style="margin-bottom:18px;">' + corpus.fullSentence + '</div>';
-    // Progress bar
-    html += '<div class="sim-progress-bar-bg" aria-label="Progress"><div id="sim-progress-bar" class="sim-progress-bar" style="width:0%"></div></div>';
-    // Collapsible Emission Matrix
-    html += '<div><button class="sim-toggle sim-btn" id="toggle-emission" aria-expanded="false">Show Emission Matrix</button>';
-    html += '<div id="emission-matrix" class="sim-collapsible" aria-hidden="true">' + renderMatrixTable(corpus.emission, corpus.pos, corpus.words) + '</div></div>';
-    // Collapsible Transition Matrix
-    html += '<div><button class="sim-toggle sim-btn" id="toggle-transition" aria-expanded="false">Show Transition Matrix</button>';
-    html += '<div id="transition-matrix" class="sim-collapsible" aria-hidden="true">' + renderMatrixTable(corpus.transition, corpus.pos, corpus.pos) + '</div></div>';
-    // Sentence to decode
-    html += '<div class="sim-section-title" style="margin-top:18px;">Viterbi Decoding</div>';
-    html += '<div class="sim-sentence"><b>Sentence:</b> ' + corpus.sentence + '</div>';
-    // Step indicator
+    let html = '';
+    // Test Sentence with info icon
+    html += '<div class="sim-sentence"><b>Test Sentence:</b> ' + corpus.sentence +
+      ' <span class="sim-info-icon" tabindex="0" aria-label="Why this Test Sentence?" role="button">i'
+      + '<span class="sim-info-tooltip">Why this Test Sentence?</span>'
+      + '</span></div>';
+    html += '<div id="sim-info-modal-bg" class="sim-info-modal-bg"><div class="sim-info-modal" tabindex="0">'
+      + '<button class="sim-info-modal-close sim-button" aria-label="Close info">&times;</button>'
+      + '<div class="sim-section-title" style="margin-top:0;">Why this Test Sentence?</div>'
+      + '<div class="sim-hint" style="margin-bottom:10px; background: #f6faff; border-left: 4px solid #0074d9;">'
+      + 'The simulation uses two different sentences for two distinct purposes, which is a common practice in natural language processing tasks. <br><br>'
+      + '<b>The Training Corpus:</b> The longer sentence, <i>' + corpus.fullSentence + '</i>, serves as the training data. The simulation analyzes this text to calculate the Transition Probabilities (the likelihood of one part-of-speech tag following another) and Emission Probabilities (the likelihood of a word corresponding to a specific tag). You see these probabilities in the two matrices at the top of the simulation.<br><br>'
+      + '<b>The Test Sentence:</b> The shorter sentence, <i>' + corpus.sentence + '</i>, is the test sentence. Your task in the simulation is to apply the Viterbi algorithm to this sentence, using the probabilities derived from the larger training corpus. The goal is to find the most likely sequence of part-of-speech tags for "' + corpus.sentence + '".<br><br>'
+      + 'In short, the long sentence isn\'t being converted into the short one. Rather, the long sentence is used to build the statistical model, and the short sentence is the specific problem you need to solve using that model. This mimics a real-world scenario where you would train a model on a large amount of text and then use it to analyze new, unseen sentences.'
+      + '</div></div></div>';
     html += '<div id="sim-step-indicator" class="sim-step-indicator"></div>';
-    // Viterbi Table
     html += '<div id="viterbi-table-div"></div>';
-    // Controls & Feedback
     html += '<div id="viterbi-controls"></div>';
-    html += '</div>';
     $('#fldiv').html(html);
-    // Collapsible logic
-    $('#toggle-emission').on('click', function() {
-        const $mat = $('#emission-matrix');
-        $mat.toggleClass('open');
-        const open = $mat.hasClass('open');
-        $(this).text(open ? 'Hide Emission Matrix' : 'Show Emission Matrix').attr('aria-expanded', open);
-        $mat.attr('aria-hidden', !open);
+    // Info icon handlers
+    $('.sim-info-icon').on('click keydown', function(e) {
+      if (e.type === 'click' || e.key === 'Enter' || e.key === ' ') {
+        $('#sim-info-modal-bg').fadeIn(120);
+        $('.sim-info-modal').focus();
+      }
     });
-    $('#toggle-transition').on('click', function() {
-        const $mat = $('#transition-matrix');
-        $mat.toggleClass('open');
-        const open = $mat.hasClass('open');
-        $(this).text(open ? 'Hide Transition Matrix' : 'Show Transition Matrix').attr('aria-expanded', open);
-        $mat.attr('aria-hidden', !open);
+    $('.sim-info-modal-close, #sim-info-modal-bg').on('click keydown', function(e) {
+      if (e.type === 'click' || e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
+        $('#sim-info-modal-bg').fadeOut(120);
+        $('.sim-info-icon').focus();
+      }
     });
-    // Start at step 1
-    renderViterbiStep(corpus, 1, Array(corpus.pos.length).fill(''));
+    // Prevent modal click from closing if clicking inside
+    $('.sim-info-modal').on('click', function(e) { e.stopPropagation(); });
+    renderViterbiTableAndControls(corpus);
 }
 
 function renderMatrixTable(matrix, rowLabels, colLabels) {
@@ -185,26 +277,7 @@ function renderMatrixTable(matrix, rowLabels, colLabels) {
     return html;
 }
 
-function renderViterbiStep(corpus, turn, userInput) {
-    const words = corpus.sentence.split(/\s+/);
-    currentTurn = turn;
-    // Progress bar: fill from left to right
-    let progress = 0;
-    if (turn > words.length) {
-        progress = 100;
-    } else {
-        progress = Math.round((turn - 1) / words.length * 100);
-    }
-    $('#sim-progress-bar').css({width: progress + '%'});
-    // Step indicator
-    $('#sim-step-indicator').text('Step ' + (turn > words.length ? words.length : turn) + ' of ' + words.length);
-    // Viterbi Table
-    $('#viterbi-table-div').html(renderViterbiTable(corpus, turn, userInput));
-    // Controls & Feedback
-    setupViterbiControls(corpus, turn, userInput);
-}
-
-function renderViterbiTable(corpus, turn = 1, userInput = []) {
+function renderViterbiTable(corpus, userInput = []) {
     const words = corpus.sentence.split(/\s+/);
     let html = '<table class="sim-table" id="viterbiDecoding"><tr><th></th>';
     words.forEach(w => html += '<th>' + w + '</th>');
@@ -212,19 +285,14 @@ function renderViterbiTable(corpus, turn = 1, userInput = []) {
     for (let i = 0; i < corpus.pos.length; i++) {
         html += '<tr><th>' + corpus.pos[i] + '</th>';
         for (let j = 0; j < words.length; j++) {
-            if (simulationComplete || j + 1 < turn) {
-                let val = corpus.viterbi[i][j];
-                html += '<td>' + (!Number.isFinite(Number(val)) ? 'N/A' : val) + '</td>';
-            } else if (j + 1 === turn) {
-                let val = userInput[i];
-                let correctVal = corpus.viterbi[i][j];
-                if (!Number.isFinite(Number(correctVal))) {
-                    html += '<td><input type="text" class="viterbi-input" data-row="' + i + '" data-col="' + j + '" value="" placeholder="N/A" disabled title="No data available for this cell" style="width:60px;background:#f5f5f5;color:#888;" /></td>';
-                } else {
-                    html += '<td><input type="text" class="viterbi-input" data-row="' + i + '" data-col="' + j + '" value="' + (val === undefined || val === null || isNaN(val) ? '' : val) + '" style="width:60px;" /></td>';
-                }
+            let val = (userInput[j] && userInput[j][i] !== undefined) ? userInput[j][i] : '';
+            let correctVal = corpus.viterbi[i][j];
+            if (simulationComplete) {
+                html += '<td>' + (!Number.isFinite(Number(correctVal)) ? 'N/A' : correctVal) + '</td>';
+            } else if (!Number.isFinite(Number(correctVal))) {
+                html += '<td><input type="text" class="viterbi-input" data-row="' + i + '" data-col="' + j + '" value="" placeholder="N/A" disabled title="No data available for this cell" style="width:60px;background:#f5f5f5;color:#888;" /></td>';
             } else {
-                html += '<td>&nbsp;</td>';
+                html += '<td><input type="text" class="viterbi-input" data-row="' + i + '" data-col="' + j + '" value="' + (val === undefined || val === null || isNaN(val) ? '' : val) + '" style="width:60px;" /></td>';
             }
         }
         html += '</tr>';
@@ -233,41 +301,47 @@ function renderViterbiTable(corpus, turn = 1, userInput = []) {
     return html;
 }
 
-function setupViterbiControls(corpus, turn, userInput) {
+function renderViterbiTableAndControls(corpus, userInput) {
+    const words = corpus.sentence.split(/\s+/);
+    if (!userInput) {
+        userInput = Array(words.length).fill().map(() => Array(corpus.pos.length).fill(''));
+    }
+    $('#viterbi-table-div').html(renderViterbiTable(corpus, userInput));
+    setupViterbiControls(corpus, userInput);
+}
+
+function setupViterbiControls(corpus, userInput) {
     const words = corpus.sentence.split(/\s+/);
     let controls = '';
     let feedback = '';
-    // Determine if we are at the last step (showing 'Check Part of Speech')
-    const isLastStep = simulationComplete || turn > words.length;
-    // Button states
+    const isLastStep = simulationComplete;
     let checkDisabled = false;
     let showAnswerDisabled = false;
     let showHintDisabled = false;
     if (isLastStep) {
-        // After 'Check Part of Speech' is visible, only Check and Reset are enabled
         showAnswerDisabled = true;
         showHintDisabled = true;
     }
-    // Controls
-    controls += '<button id="viterbi-check-btn" class="sim-btn" aria-label="Check your answer"' + (isLastStep ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : '') + '>Check</button>';
+    controls += '<button id="viterbi-check-btn" class="sim-button" aria-label="Check your answer"' + (isLastStep ? ' disabled' : '') + '>Check</button>';
     controls += ' <span id="get-hide-answer">';
-    controls += '<button id="show-answer-btn" class="sim-btn" aria-label="Show the answer for this step"' + (showAnswerDisabled ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : '') + '>Show Answer</button>';
+    controls += '<button id="show-answer-btn" class="sim-button" aria-label="Show the answer for this step"' + (showAnswerDisabled ? ' disabled' : '') + '>Show Answer</button>';
     controls += '</span>';
-    controls += ' <button id="show-hint-btn" class="sim-btn" aria-label="Show a hint for this step"' + (showHintDisabled ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : '') + '>Show Hint</button>';
-    controls += ' <button id="restart-btn" class="sim-btn" aria-label="Restart simulation">Reset</button>';
+    controls += ' <button id="show-hint-btn" class="sim-button" aria-label="Show a hint for this step"' + (showHintDisabled ? ' disabled' : '') + '>Show Hint</button>';
+    controls += ' <button id="restart-btn" class="sim-button" aria-label="Restart simulation">Reset</button>';
     $('#viterbi-controls').html(controls + '<div id="viterbi-feedback" class="sim-feedback">' + feedback + '</div><div id="sim-hint"></div>');
-    // Disable/enable logic for answer/hint
+    // Show Answer button
     if (!showAnswerDisabled) {
         $(document).off('click', '#show-answer-btn').on('click', '#show-answer-btn', function() {
-            showViterbiAnswer(corpus, turn);
+            showViterbiAnswer(corpus, userInput);
         });
     } else {
         $(document).off('click', '#show-answer-btn');
     }
+    // Show Hint button
     if (!showHintDisabled) {
         $(document).off('click', '#show-hint-btn').on('click', '#show-hint-btn', function() {
-            const hint = viterbiHints[(turn - 1) % viterbiHints.length];
-            $('#sim-hint').html('<div class="sim-hint" tabindex="0">' + hint + '</div>');
+            let allHints = viterbiHints.map(h => '<div class="sim-hint" tabindex="0">' + h + '</div>').join('');
+            $('#sim-hint').html(allHints);
             $(this).attr('aria-pressed', 'true');
         });
     } else {
@@ -275,33 +349,51 @@ function setupViterbiControls(corpus, turn, userInput) {
     }
     // Reset button
     $(document).off('click', '#restart-btn').on('click', '#restart-btn', function() {
-        // Clear the simulation display area
-        $('#fldiv').html('');
         simulationComplete = false;
+        // Always reset to Corpus A (corpus1)
+        $('#corpus-select').val('corpus1').trigger('change');
     });
-    // Keyboard navigation for input fields
-    $('.viterbi-input').each(function(idx, el) {
+    // Keyboard navigation for input fields (column-wise tabbing)
+    const $inputs = $('.viterbi-input');
+    $inputs.each(function(idx, el) {
         $(el).attr('aria-label', 'Input for ' + corpus.pos[$(el).data('row')] + ', word ' + (parseInt($(el).data('col')) + 1));
         $(el).on('keydown', function(e) {
             if (e.key === 'Enter') {
                 $('#viterbi-check-btn').focus().click();
+            } else if (e.key === 'Tab') {
+                // Custom tab order: column by column
+                e.preventDefault();
+                const row = $(this).data('row');
+                const col = $(this).data('col');
+                let nextRow = (row + 1) % corpus.pos.length;
+                let nextCol = col;
+                if (nextRow === 0) {
+                    nextCol = col + 1;
+                }
+                // Find the next input
+                const $next = $('.viterbi-input[data-row=' + nextRow + '][data-col=' + nextCol + ']');
+                if ($next.length) {
+                    $next.focus();
+                }
             }
         });
     });
-    // Button handler
+    // Check button handler
     if (!isLastStep) {
         $('#viterbi-check-btn').off('click').on('click', function() {
-            // Collect user input for this column
-            let userVals = [];
+            // Collect all user input for all columns
+            let userVals = Array(words.length).fill().map(() => Array(corpus.pos.length).fill(''));
             let valid = true;
             $('.viterbi-input').each(function() {
+                let row = $(this).data('row');
+                let col = $(this).data('col');
                 if ($(this).is(':disabled')) {
-                    userVals.push('N/A');
-                    return; // skip validation for disabled inputs
+                    userVals[col][row] = 'N/A';
+                    return;
                 }
                 let val = $(this).val().trim();
                 if (val === '' || isNaN(parseFloat(val))) valid = false;
-                userVals.push(val);
+                userVals[col][row] = val;
             });
             if (!valid) {
                 $('#viterbi-feedback').html('<span style="color:red;">Please enter valid numbers for all fields.</span>');
@@ -309,45 +401,30 @@ function setupViterbiControls(corpus, turn, userInput) {
             }
             // Compare with correct answers
             let correct = true;
-            for (let i = 0; i < corpus.pos.length; i++) {
-                if (userVals[i] === 'N/A') continue;
-                let userVal = parseFloat(userVals[i]);
-                let correctVal = parseFloat(corpus.viterbi[i][turn - 1]);
-                if (Math.abs(userVal - correctVal) > 0.001) correct = false;
+            for (let j = 0; j < words.length; j++) {
+                for (let i = 0; i < corpus.pos.length; i++) {
+                    if (userVals[j][i] === 'N/A') continue;
+                    let userVal = parseFloat(userVals[j][i]);
+                    let correctVal = parseFloat(corpus.viterbi[i][j]);
+                    if (Math.abs(userVal - correctVal) > 0.001) correct = false;
+                }
             }
-            // Track user answer for summary
-            userAnswers[turn - 1] = userVals.slice();
+            userAnswers = userVals.map(arr => arr.slice());
             if (correct) {
                 $('#sim-hint').html('');
-                if (turn < words.length) {
-                    // Go to next column
-                    $('#viterbi-feedback').html('<span style="color:green;">Right Answer! Go to next step.</span>');
-                    setTimeout(function() {
-                        renderViterbiStep(corpus, turn + 1, Array(corpus.pos.length).fill(''));
-                    }, 800);
-                } else {
-                    // All columns done
-                    $('#sim-progress-bar').css({width: '100%'});
-                    simulationComplete = true;
-                    $('#viterbi-table-div').html(renderViterbiTable(corpus, turn + 1, Array(corpus.pos.length).fill('')));
-                    $('#viterbi-feedback').html('<span style="color:green;">All steps correct!<br/><button id="show-pos-btn" class="sim-btn">Check Part of Speech</button></span>');
-                    // Only show Check and Reset, disable others
-                    $('#show-answer-btn, #show-hint-btn').prop('disabled', true).css({'opacity':0.5, 'cursor':'not-allowed'});
-                    $('#viterbi-check-btn').show();
-                    $('#restart-btn').show();
-                    // Hide/disable other controls
-                    $(document).off('click', '#show-answer-btn');
-                    $(document).off('click', '#show-hint-btn');
-                    $('#show-pos-btn').off('click').on('click', function() {
-                        showPOS(corpus);
-                        // After final table, disable all except Reset
-                        $('#viterbi-check-btn, #show-answer-btn, #show-hint-btn').prop('disabled', true).css({'opacity':0.5, 'cursor':'not-allowed'});
-                    });
-                }
+                simulationComplete = true;
+                $('#viterbi-table-div').html(renderViterbiTable(corpus, userVals));
+                // Immediately show POS tags and final table (skip Check Part of Speech button)
+                showPOS(corpus);
+                $('#viterbi-feedback').html('<span style="color:green;">All steps correct! POS tags for Decoded Sentence shown below.</span>');
+                $('#show-answer-btn, #show-hint-btn').prop('disabled', true).css({'opacity':0.5, 'cursor':'not-allowed'});
+                $('#viterbi-check-btn').show();
+                $('#restart-btn').show();
+                $(document).off('click', '#show-answer-btn');
+                $(document).off('click', '#show-hint-btn');
             } else {
-                // Show inline explanation for wrong answer
                 $('#viterbi-feedback').html('<span style="color:red;">Wrong Answer! Try again.</span>');
-                $('#sim-hint').html('<div class="sim-hint" tabindex="0">Remember: ' + viterbiHints[(turn - 1) % viterbiHints.length] + '</div>');
+                $('#sim-hint').html('');
             }
         });
     } else {
@@ -362,7 +439,9 @@ function showPOS(corpus) {
     // Show the POS tags for the decoded sentence
     let posRow = '<div class="sim-section-title">POS tags for Decoded Sentence</div>';
     posRow += '<table class="sim-table"><tr>';
-    corpus.sentencePos.forEach(w => {
+    // Show the test sentence words as the heading
+    const words = corpus.sentence.split(/\s+/);
+    words.forEach(w => {
         posRow += '<th>' + w + '</th>';
     });
     posRow += '</tr><tr>';
@@ -372,37 +451,65 @@ function showPOS(corpus) {
     posRow += '</tr></table>';
     $('#viterbi-table-div').append(posRow);
     $('#viterbi-feedback').html('<span style="color:green;">Simulation complete!</span>');
+    // Disable the Check button after completion
+    $('#viterbi-check-btn').prop('disabled', true).css({'opacity':0.5, 'cursor':'not-allowed'});
 }
 
-function showViterbiAnswer(corpus, turn) {
-    // Show a side-by-side comparison: user input vs. correct answer for the current step
+function showViterbiAnswer(corpus, userInput) {
     const words = corpus.sentence.split(/\s+/);
     const pos = corpus.pos;
     const viterbi = corpus.viterbi;
-    const userStep = userAnswers[turn - 1] || [];
-    let html = '<h4>Step ' + turn + ' Answer Comparison</h4>';
-    html += '<table class="sim-table" style="max-width:600px;margin:auto;">';
-    html += '<tr><th>POS</th><th>Your Value</th><th>Correct Value</th></tr>';
-    for (let i = 0; i < pos.length; i++) {
-        let userVal = userStep[i];
-        let correctVal = viterbi[i][turn - 1];
-        let isCorrect = (parseFloat(userVal) === correctVal);
-        let userDisplay = '';
-        if (userVal === undefined || userVal === null || userVal === '') {
-            userDisplay = '?';
-        } else if (isNaN(parseFloat(userVal))) {
-            userDisplay = 'Invalid';
-        } else {
-            userDisplay = userVal;
+    // Always use userAnswers for user input values
+    userInput = userAnswers && userAnswers.length ? userAnswers : userInput;
+    // Check if all user input cells are empty
+    let allEmpty = true;
+    for (let j = 0; j < words.length; j++) {
+        for (let i = 0; i < pos.length; i++) {
+            let val = (userInput && userInput[j] && userInput[j][i] !== undefined) ? userInput[j][i] : '';
+            if (val && val.trim() !== '') {
+                allEmpty = false;
+                break;
+            }
         }
-        let correctDisplay = (!Number.isFinite(Number(correctVal)) ? 'N/A' : correctVal);
-        html += '<tr>';
-        html += '<td>' + pos[i] + '</td>';
-        html += '<td style="background:' + (isCorrect ? '#eaffea' : '#ffeaea') + ';">' + userDisplay + '</td>';
-        html += '<td style="background:#eaffea;font-weight:bold;">' + correctDisplay + '</td>';
+        if (!allEmpty) break;
+    }
+    if (allEmpty) {
+        $('#viterbi-feedback').html('<span style="color:red;">Please enter your answers in the table before viewing the answer comparison.</span>');
+        return;
+    }
+    let html = '';
+    html += '<table class="sim-table" style="max-width:600px;margin:auto;">';
+    html += '<tr><th>POS \\ Word</th>';
+    words.forEach(w => html += '<th>' + w + '</th>');
+    html += '</tr>';
+    for (let i = 0; i < pos.length; i++) {
+        html += '<tr><th>' + pos[i] + '</th>';
+        for (let j = 0; j < words.length; j++) {
+            let userVal = (userInput && userInput[j] && userInput[j][i] !== undefined) ? userInput[j][i] : '';
+            let correctVal = viterbi[i][j];
+            let isCorrect = (parseFloat(userVal) === correctVal);
+            let userDisplay = '';
+            if (userVal === undefined || userVal === null || userVal === '') {
+                userDisplay = '';
+            } else if (isNaN(parseFloat(userVal))) {
+                userDisplay = 'Invalid';
+            } else {
+                userDisplay = userVal;
+            }
+            let correctDisplay = (!Number.isFinite(Number(correctVal)) ? 'N/A' : correctVal);
+            html += '<td>';
+            if (userDisplay === 'Invalid') {
+                html += '<span style="color:red;">Invalid</span> <span style="color:green;font-weight:bold;">(' + correctDisplay + ')</span>';
+            } else if (isCorrect) {
+                html += '<span style="color:green;font-weight:bold;">' + userDisplay + ' / ' + correctDisplay + '</span>';
+            } else {
+                html += '<span style="color:red;">' + userDisplay + '</span> <span style="color:green;font-weight:bold;">(' + correctDisplay + ')</span>';
+            }
+            html += '</td>';
+        }
         html += '</tr>';
     }
     html += '</table>';
-    html += '<div style="font-size:0.95em;margin-top:8px;color:#555;">Legend: <b>N/A</b> = Not Available in data, <b>?</b> = No input, <b>Invalid</b> = Not a number</div>';
+    html += '<div style="font-size:0.95em;margin-top:8px;color:#555;">Legend: <b>N/A</b> = Not Available in data, <b>Invalid</b> = Not a number</div>';
     $('#viterbi-feedback').html(html);
 }

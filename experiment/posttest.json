@@ -2,171 +2,171 @@
   "version": 2.0,
   "questions": [
     {
-      "question": "What is a 'chunk' in the context of Natural Language Processing?",
+      "question": "Which of the following best describes a Hidden Markov Model (HMM) in the context of POS tagging?",
       "answers": {
-        "a": "A non-overlapping, meaningful group of words such as a noun or verb phrase",
-        "b": "A single word only",
-        "c": "A random group of words",
-        "d": "A full syntactic tree"
+        "a": "A statistical model that uses observed words and hidden POS tags",
+        "b": "A model that only uses word frequency",
+        "c": "A neural network for translation",
+        "d": "A rule-based grammar parser"
       },
       "explanations": {
-        "a": "Correct! A chunk is a non-overlapping, non-recursive group of words forming a meaningful unit, like a noun phrase.",
-        "b": "Incorrect. Chunks can be more than one word.",
-        "c": "Incorrect. Chunks are not random groups, but linguistically meaningful units.",
-        "d": "Incorrect. Chunks are not full syntactic trees."
+        "a": "Correct! HMMs model the sequence of observed words and hidden POS tags using probabilities.",
+        "b": "Incorrect. HMMs use more than just word frequency.",
+        "c": "Incorrect. HMMs are not neural networks.",
+        "d": "Incorrect. HMMs are not rule-based parsers."
       },
       "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
-      "question": "Which of the following is NOT typically used as a feature for chunking?",
+      "question": "What is the first step in applying the Viterbi algorithm for POS tagging?",
       "answers": {
-        "a": "Word itself (lexicon)",
-        "b": "Part-of-speech (POS) tag",
-        "c": "Font color",
-        "d": "Neighboring POS tags"
+        "a": "Initialize the first column of the Viterbi matrix using emission and transition probabilities",
+        "b": "Backtrack to find the best path",
+        "c": "Randomly assign tags to words",
+        "d": "Count the number of words"
       },
       "explanations": {
-        "a": "Incorrect. The word itself is a common feature.",
-        "b": "Incorrect. POS tags are essential features for chunking.",
-        "c": "Correct! Font color is not a linguistic feature and is not used in chunking.",
-        "d": "Incorrect. Neighboring POS tags are often used as features."
-      },
-      "correctAnswer": "c",
-      "difficulty": "beginner"
-    },
-    {
-      "question": "What is the main advantage of using both lexicon and POS features for chunking?",
-      "answers": {
-        "a": "It provides richer information, improving chunking accuracy",
-        "b": "It makes the model slower",
-        "c": "It reduces the number of chunks",
-        "d": "It is required for all languages"
-      },
-      "explanations": {
-        "a": "Correct! Combining lexical and POS features gives the model more context, usually resulting in higher accuracy.",
-        "b": "Incorrect. While more features may increase computation, the main advantage is improved accuracy.",
-        "c": "Incorrect. The number of chunks depends on the sentence, not the features.",
-        "d": "Incorrect. While helpful, it is not strictly required for all languages."
+        "a": "Correct! Initialization is the first step, using the start probabilities.",
+        "b": "Incorrect. Backtracking is the final step.",
+        "c": "Incorrect. Tags are not assigned randomly.",
+        "d": "Incorrect. Counting words is not the first step."
       },
       "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
-      "question": "If you increase the size of the training corpus for a chunker, what is the most likely effect?",
+      "question": "What does each cell in the Viterbi matrix represent?",
       "answers": {
-        "a": "Accuracy increases (up to a point)",
-        "b": "Accuracy decreases",
-        "c": "No effect on accuracy",
-        "d": "The model stops working"
+        "a": "The probability of the most likely tag sequence ending at that tag and word",
+        "b": "The number of words in the sentence",
+        "c": "The frequency of the tag",
+        "d": "The length of the sentence"
       },
       "explanations": {
-        "a": "Correct! More training data usually helps the model generalize better, improving accuracy until a saturation point.",
-        "b": "Incorrect. More data usually helps, not hurts, accuracy.",
-        "c": "Incorrect. Training data size does affect accuracy.",
-        "d": "Incorrect. The model does not stop working with more data."
+        "a": "Correct! Each cell holds the probability of the best path to that point.",
+        "b": "Incorrect. The cell is not a word count.",
+        "c": "Incorrect. The cell is not a frequency.",
+        "d": "Incorrect. The cell is not a length."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Why is dynamic programming important in the Viterbi algorithm?",
+      "answers": {
+        "a": "It avoids redundant calculations by storing intermediate results",
+        "b": "It generates random tag sequences",
+        "c": "It ignores previous computations",
+        "d": "It is only used for sorting words"
+      },
+      "explanations": {
+        "a": "Correct! Dynamic programming makes the Viterbi algorithm efficient.",
+        "b": "Incorrect. The algorithm does not generate random sequences.",
+        "c": "Incorrect. It leverages previous results.",
+        "d": "Incorrect. It is not for sorting."
       },
       "correctAnswer": "a",
       "difficulty": "intermediate"
     },
     {
-      "question": "Which model is generally more flexible for chunking: HMM or CRF?",
+      "question": "In the simulation, what does the 'Show Answer' button do?",
       "answers": {
-        "a": "HMM",
-        "b": "CRF",
-        "c": "Both are equally flexible",
-        "d": "Neither can be used for chunking"
+        "a": "Displays a comparison of your answers and the correct Viterbi values",
+        "b": "Resets the simulation",
+        "c": "Shows only the emission matrix",
+        "d": "Submits your answers for grading"
       },
       "explanations": {
-        "a": "Incorrect. HMMs are less flexible in feature representation.",
-        "b": "Correct! CRFs can use a wider range of features and dependencies, making them more flexible for chunking.",
-        "c": "Incorrect. CRFs are generally more flexible than HMMs.",
-        "d": "Incorrect. Both can be used for chunking."
-      },
-      "correctAnswer": "b",
-      "difficulty": "intermediate"
-    },
-    {
-      "question": "What is a common error type in chunking output?",
-      "answers": {
-        "a": "Boundary error (incorrect chunk start/end)",
-        "b": "Font error",
-        "c": "POS tag error only",
-        "d": "No errors occur in chunking"
-      },
-      "explanations": {
-        "a": "Correct! Boundary errors, where the chunk start or end is misplaced, are common in chunking tasks.",
-        "b": "Incorrect. Font is not relevant to chunking errors.",
-        "c": "Incorrect. While POS errors can affect chunking, boundary errors are more specific to chunking.",
-        "d": "Incorrect. Errors do occur in chunking."
+        "a": "Correct! It shows a color-coded table comparing your input to the correct values.",
+        "b": "Incorrect. Reset is a separate button.",
+        "c": "Incorrect. The emission matrix is always visible.",
+        "d": "Incorrect. The simulation is for practice, not grading."
       },
       "correctAnswer": "a",
       "difficulty": "intermediate"
     },
     {
-      "question": "Suppose your chunker is making many mistakes. Which of the following is LEAST likely to help?",
+      "question": "What is the role of the transition matrix in the Viterbi algorithm?",
       "answers": {
-        "a": "Adding more labeled training data",
-        "b": "Using richer features (lexicon + POS)",
-        "c": "Randomly shuffling the training labels",
-        "d": "Switching from HMM to CRF"
+        "a": "It provides the probability of moving from one POS tag to another",
+        "b": "It gives the probability of a word given a tag",
+        "c": "It counts the number of tags",
+        "d": "It is not used in Viterbi"
       },
       "explanations": {
-        "a": "Incorrect. More labeled data usually helps.",
-        "b": "Incorrect. Richer features usually help.",
-        "c": "Correct! Randomly shuffling the labels will harm, not help, accuracy.",
-        "d": "Incorrect. Switching to a more flexible model like CRF can help."
+        "a": "Correct! The transition matrix is essential for modeling tag sequences.",
+        "b": "Incorrect. That is the emission matrix's role.",
+        "c": "Incorrect. The matrix is not a count.",
+        "d": "Incorrect. The transition matrix is used in Viterbi."
       },
-      "correctAnswer": "c",
-      "difficulty": "advanced"
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
     },
     {
-      "question": "What does the 'Check Accuracy' step in the simulation demonstrate?",
+      "question": "What happens if you enter invalid or empty values in the Viterbi table and click 'Check'?",
       "answers": {
-        "a": "How well the chunker performs on unseen data",
-        "b": "How to count the number of words in a sentence",
-        "c": "How to translate a sentence",
-        "d": "How to generate random sentences"
+        "a": "The simulation prompts you to enter valid numbers for all fields",
+        "b": "The simulation accepts the input as correct",
+        "c": "The simulation resets",
+        "d": "The answer is shown immediately"
       },
       "explanations": {
-        "a": "Correct! The accuracy check shows the chunker's performance on test data, reflecting its generalization ability.",
-        "b": "Incorrect. The step is not about word counting.",
-        "c": "Incorrect. The step is not about translation.",
-        "d": "Incorrect. The step is not about sentence generation."
+        "a": "Correct! The simulation requires valid numeric input for all fields.",
+        "b": "Incorrect. Invalid input is not accepted.",
+        "c": "Incorrect. The simulation does not reset.",
+        "d": "Incorrect. The answer is not shown unless you click 'Show Answer'."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Why is backtracking used in the Viterbi algorithm?",
+      "answers": {
+        "a": "To reconstruct the most probable sequence of POS tags after filling the table",
+        "b": "To randomly assign tags",
+        "c": "To count the number of words",
+        "d": "To display the emission matrix"
+      },
+      "explanations": {
+        "a": "Correct! Backtracking finds the best tag sequence after the table is filled.",
+        "b": "Incorrect. Tags are not assigned randomly.",
+        "c": "Incorrect. Counting words is not the goal.",
+        "d": "Incorrect. The emission matrix is always visible."
       },
       "correctAnswer": "a",
       "difficulty": "advanced"
     },
     {
-      "question": "Which of the following best describes the difference between chunking and full parsing?",
+      "question": "Which of the following is a limitation of HMM-based POS tagging?",
       "answers": {
-        "a": "Chunking finds non-overlapping groups, full parsing finds complete syntactic structure",
-        "b": "Chunking is slower than full parsing",
-        "c": "Full parsing ignores word order",
-        "d": "Chunking is only used for English"
+        "a": "It assumes the probability of a word depends only on its tag and the previous tag",
+        "b": "It can model long-range dependencies easily",
+        "c": "It uses deep learning",
+        "d": "It is rule-based only"
       },
       "explanations": {
-        "a": "Correct! Chunking identifies non-overlapping, non-recursive groups (chunks), while full parsing builds a complete syntactic tree.",
-        "b": "Incorrect. Chunking is usually faster than full parsing.",
-        "c": "Incorrect. Full parsing is sensitive to word order.",
-        "d": "Incorrect. Chunking is used for many languages."
+        "a": "Correct! HMMs make the Markov assumption, which can be limiting.",
+        "b": "Incorrect. HMMs struggle with long-range dependencies.",
+        "c": "Incorrect. HMMs are not deep learning models.",
+        "d": "Incorrect. HMMs are statistical, not rule-based."
       },
       "correctAnswer": "a",
       "difficulty": "advanced"
     },
     {
-      "question": "In practical NLP applications, why is chunking useful?",
+      "question": "What is the final output of the simulation after a correct submission?",
       "answers": {
-        "a": "It helps identify meaningful phrases for downstream tasks like information extraction",
-        "b": "It replaces the need for all other NLP tasks",
-        "c": "It is only used for text generation",
-        "d": "It is not useful in practice"
+        "a": "The POS tags for the test sentence are displayed",
+        "b": "The simulation resets",
+        "c": "The emission matrix is hidden",
+        "d": "A random tag sequence is shown"
       },
       "explanations": {
-        "a": "Correct! Chunking helps identify phrases (like noun or verb phrases) that are useful for tasks such as information extraction, question answering, and more.",
-        "b": "Incorrect. Chunking is one of many useful NLP tasks.",
-        "c": "Incorrect. Chunking is not limited to text generation.",
-        "d": "Incorrect. Chunking is widely used in practice."
+        "a": "Correct! The simulation displays the decoded POS tags for the test sentence.",
+        "b": "Incorrect. The simulation does not reset automatically.",
+        "c": "Incorrect. The emission matrix remains visible.",
+        "d": "Incorrect. The output is not random."
       },
       "correctAnswer": "a",
       "difficulty": "advanced"

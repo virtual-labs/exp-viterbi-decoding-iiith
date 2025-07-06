@@ -13,7 +13,9 @@
     <!-- <link href="vendors/font-awesome/css/font-awesome.css" rel="stylesheet"/> -->
 
     <!-- Custom CSS -->
+    <link href="css/default.css" rel="stylesheet"/>
     <link href="css/style.css" rel="stylesheet"/>
+    <link href="css/main.css" rel="stylesheet"/>
     <!-- <link href="css/style-main.scss" rel="stylesheet"/> -->
     <style type="text/css">
         table,
@@ -21,6 +23,22 @@
         td {
             border: 1px solid black;
             border-collapse: collapse;
+        }
+        /* Responsive 3-pane layout */
+        @media (max-width: 700px) {
+          #main-3pane-container {
+            flex-direction: column !important;
+            gap: 16px !important;
+          }
+          #left-pane, #middle-pane, #right-pane {
+            min-width: 0 !important;
+            max-width: 100vw !important;
+            width: 100% !important;
+            flex: 1 1 100% !important;
+          }
+          #left-pane { order: 1; }
+          #right-pane { order: 2; }
+          #middle-pane { order: 3; }
         }
     </style>
 
@@ -116,39 +134,38 @@
 <body class="index" id="page-top">
     
     <div id="top">
-
         <div id="content">
-            
-        
-            <!-- =================================================================================================================================== -->
-            <div class="container-fluid" style="margin-left: 35px; margin-right: 35px;">
-                <div class="row">
-                    
-                    <div class="col-md-10 lab-list-col-10">
-
-                        <!--edit -->
-                        <!-- <h1 class="text-h1-lightblue">POS Tagging - Viterbi Decoding</h1> -->
-                        <div class="content" id="experiment-article-section-4-content">
-                            <div id="viterbi_decoding">
-
-                                <div class="content" id="experiment-article-section-4-content">
-                                    <div id="viterbi_decoding">
-
-                                        <div align="center" id="corpus"></div>
-                                        <br/>
-                                        <div align="center" id="fldiv"></div>
-
+            <div id="instructions-bar" onclick="$('#instructions-content').slideToggle(200); $('#instructions-arrow').toggleClass('rotated');">
+                <span><svg style="vertical-align:middle; margin-right:8px;" width="18" height="18" fill="none" stroke="#1565c0" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2 2"/></svg>Instructions</span>
+                <span id="instructions-arrow"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="#1565c0" stroke-width="2" fill="none"/></svg></span>
+            </div>
+            <div id="instructions-content">
+                <ol style="margin:0; padding-left:20px;">
+                    <li>Select a corpus from the dropdown menu. By default, 'Corpus A' is selected and loaded.</li>
+                    <li>Observe the displayed emission and transition matrices, which are computed from the training sentence.</li>
+                    <li>In the Viterbi table, enter the probability values for each POS tag and word in the test sentence. All columns are available for input at once.</li>
+                    <li>Click the "Check" button to validate your answers. Correct values are retained; incorrect ones can be revised. Feedback is provided for each attempt.</li>
+                    <li>If you need help, click "Show Hint" for guidance. To see the correct answers and compare them with your input, click "Show Answer" (only after entering your answers).</li>
+                    <li>Once all answers are correct, the simulation displays the decoded POS tags for the test sentence.</li>
+                    <li>To start over or switch to a different corpus, use the "Reset" button (which always resets to Corpus A) or select a new corpus from the dropdown.</li>
+                </ol>
+            </div>
+            <div id="main-3pane-container" style="display:flex; flex-direction:row; gap:24px; min-height:80vh; margin: 35px;">
+                <!-- Left Pane -->
+                <div id="left-pane" style="flex:0 0 260px; min-width:220px; max-width:320px;">
+                    <div id="corpus"></div>
+                    <div id="full-sentence" style="margin-top:24px;"></div>
                                     </div>
+                <!-- Middle Pane -->
+                <div id="middle-pane" style="flex:1 1 0; min-width:320px; max-width:700px;">
+                    <div id="fldiv"></div>
                                 </div>
-
-                            </div>
-                        </div>
-                    </div>
+                <!-- Right Pane -->
+                <div id="right-pane" style="flex:0 0 320px; min-width:220px; max-width:400px;">
+                    <div id="matrices-pane"></div>
                 </div>
             </div>
         </div>
-        <!-- =================================================================================================================================== -->
-
     </div>
     <!-- content div -->
 
@@ -165,11 +182,11 @@
 
     <!-- Remove inline JS for owlCarousel and tabs -->
 
-
-
-
-
-
-
+    <script>
+    $(function(){
+      // Add rotate effect for arrow
+      $("#instructions-arrow").removeClass("rotated");
+    });
+    </script>
 
 </body><!-- jQuery --></html>

@@ -1,15 +1,15 @@
-**STEP1**:Select the corpus.
+### Procedure
 
-**OUTPUT**: Emission and Transmission matrix will appear.
+**Step 1:** Select a corpus from the dropdown menu. By default, 'Corpus A' is selected and loaded.
 
-**STEP2**: Fill the column with the probabilty of possible POS tags given the word (i.e. form the viterbi matrix by filling colum for each observation). Answers submitted are rounded off to 3 digits after decimal and are than checked.
+**Step 2:** Observe the displayed emission and transition matrices, which are computed from the training sentence.
 
-**STEP3**: Check the column.
+**Step 3:** In the Viterbi table, enter the probability values for each POS tag and word in the test sentence. All columns are available for input at once.
 
-Wrong answers are indicated by red backgound in a cell.
+**Step 4:** Click the "Check" button to validate your answers. Correct values are retained; incorrect ones can be revised. Feedback is provided for each attempt.
 
-**If answers are right, then go to step2**
+**Step 5:** If you need help, click "Show Hint" for guidance. To see the correct answers and compare them with your input, click "Show Answer" (only after entering your answers).
 
-**STEP4**: Repeat steps 2 and 3 untill all words of a sentence are covered.
+**Step 6:** Once all answers are correct, the simulation displays the decoded POS tags for the test sentence.
 
-**STEP5**: At last check the POS tag for each word obtained from backtracking
+**Step 7:** To start over or switch to a different corpus, use the "Reset" button (which always resets to Corpus A) or select a new corpus from the dropdown.
