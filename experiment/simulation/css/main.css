@@ -1,11 +1,4 @@
-/* main.css: Adapted from chunker experiment for POS Tagger */
-html {
-  box-sizing: border-box;
-  font-size: 12px;
-}
-*, *:before, *:after {
-  box-sizing: inherit;
-}
+/* main.css: Modern responsive design for Viterbi Decoding experiment */
 :root {
   --color-primary: #4361ee;
   --color-primary-light: #4895ef;
@@ -16,6 +9,8 @@ html {
   --color-accent: #f72585;
   --color-accent-light: #ff8fab;
   --color-accent-dark: #b5179e;
+  --color-success: #4caf50;
+  --color-error: #f44336;
   --color-neutral-50: #f8fafc;
   --color-neutral-100: #f1f5f9;
   --color-neutral-200: #e2e8f0;
@@ -28,57 +23,218 @@ html {
   --color-neutral-900: #0f172a;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
-  --shadow-md: 0 4px 6px -1px rgba(67, 97, 238, 0.08), 0 2px 4px -1px rgba(67, 97, 238, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(67, 97, 238, 0.10), 0 4px 6px -2px rgba(67, 97, 238, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(67, 97, 238, 0.08),
+    0 2px 4px -1px rgba(67, 97, 238, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(67, 97, 238, 0.1),
+    0 4px 6px -2px rgba(67, 97, 238, 0.05);
 }
-body {
-  background: var(--color-neutral-50);
-  color: var(--color-neutral-800);
-  font-family: 'Roboto', Arial, sans-serif;
-  font-size: 1rem;
+
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-50);
+  font-size: 0.97em;
   min-height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-x: visible;
 }
-.simulation-flex-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  max-width: 1100px;
+
+.container {
+  max-width: 100vw; /* Use full viewport width */
   margin: 0 auto;
-  padding-top: 0.5em;
-  padding-bottom: 0.5em;
-}
-@media (min-width: 900px) {
-  .simulation-flex-container {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: 2.5em;
-  }
-}
-.sim-col1, .sim-col2 {
-  flex: 1 1 0;
-  min-width: 340px;
-  max-width: 520px;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  margin-top: 2.5em;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  overflow-x: auto; /* Allow horizontal scrolling when tables are very wide */
 }
-.sim-col1 {
-  margin-right: 1.5em;
+
+.main-content {
+  width: 100%;
+  max-width: 100vw; /* Use full viewport width */
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  min-width: 0; /* Allow shrinking */
 }
-.sim-col2 {
-  margin-left: 1.5em;
-  justify-content: flex-start;
+
+/* Instructions Panel */
+#instructions-bar {
+  width: 100%;
+  max-width: 1040px;
+  margin: 1.5rem auto;
+  background: linear-gradient(90deg, #6ef2e6 0%, #4895ef 100%);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  box-shadow: var(--shadow-md);
+  padding: 1rem 2rem;
+  border: 1px solid var(--color-neutral-200);
 }
+
+#instructions-bar:hover {
+  background: linear-gradient(90deg, #72efdd 0%, #4895ef 100%);
+  box-shadow: var(--shadow-lg);
+}
+
+.instructions-label {
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  font-size: 1.2em;
+  letter-spacing: 0.01em;
+  text-align: center;
+  flex: 1;
+}
+
+.arrow-icon {
+  position: absolute;
+  right: 2rem;
+  font-size: 1.2em;
+  color: var(--color-primary-dark);
+  transition: transform 0.2s ease;
+}
+
+.arrow-icon.rotated {
+  transform: rotate(180deg);
+}
+
+#instructions-content {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto 2rem auto;
+  background: #fff;
+  border: 1px solid var(--color-neutral-200);
+  border-top: none;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 1.5rem 2rem;
+  box-shadow: var(--shadow-md);
+  display: none;
+}
+
+#instructions-content ol {
+  margin: 0;
+  padding-left: 1.5rem;
+  line-height: 1.7;
+}
+
+#instructions-content li {
+  margin-bottom: 0.8rem;
+  color: var(--color-neutral-800);
+}
+
+/* Main Layout - 2-pane container */
+#main-2pane-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  min-width: 0;
+}
+
+/* Left pane - corpus selection, test sentence, and matrices */
+#left-pane {
+  flex: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+/* Right pane - Viterbi table */
+#right-pane {
+  flex: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Pane Sections */
+#corpus-selection,
+#corpus-info {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.viterbi-section,
+.matrices-section {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  width: auto; /* Let content determine width */
+  min-width: 0;
+  overflow-x: visible;
+  display: flex; /* Use flexbox for centering */
+  flex-direction: column; /* Stack content vertically */
+  align-items: center; /* Center content horizontally */
+}
+
+/* POS Tags Section - matching viterbi-table styling */
+.pos-tags-section {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  margin-top: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pos-tags-section .sim-section-title {
+  color: var(--color-primary-dark);
+  font-size: 1.3em;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-align: center; /* Center the title */
+  align-self: stretch; /* Allow title to take full width */
+}
+
+/* Section Titles */
+.sim-section-title,
+.viterbi-section-title {
+  color: var(--color-primary-dark);
+  font-size: 1.3em;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-align: center; /* Center section titles */
+  align-self: stretch; /* Allow title to take full width of flex container */
+}
+
+/* Simulation Step Styling */
 .simulation-step {
   background: #fff;
   box-shadow: var(--shadow-md);
   border-radius: var(--radius-lg);
-  padding: 0.2em 1.2em 0.2em 1.2em;
+  padding: 1.2em;
   margin-bottom: 1em;
   max-width: 100%;
   text-align: center;
@@ -89,6 +245,7 @@ body {
   justify-content: flex-start;
   align-items: center;
 }
+
 .simulation-step .step-heading {
   font-size: 1.19em;
   font-weight: 700;
@@ -97,358 +254,1103 @@ body {
   margin-top: 0;
   letter-spacing: 0.01em;
 }
-.simulation-step .explanation {
-  margin-bottom: 0.4em;
+
+/* Dropdowns */
+select,
+.viterbi-dropdown {
   width: 100%;
-  font-size: 1em;
-  text-align: left;
-}
-.simulation-step select,
-.simulation-step input[type="text"] {
-  display: block;
-  margin: 0.4em auto 0.4em auto;
-  width: 90%;
-  min-width: 120px;
-  max-width: 320px;
-  box-sizing: border-box;
   background: var(--color-neutral-100);
-  border: 1px solid var(--color-neutral-300);
+  border: 2px solid var(--color-neutral-300);
   border-radius: var(--radius-md);
-  font-size: 1.15rem;
   color: var(--color-neutral-800);
-  padding: 0.5em 0.8em;
-  transition: border-color 0.2s;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5rem 1.5rem;
+  padding-right: 2.5rem;
 }
-.simulation-step select:focus,
-.simulation-step input[type="text"]:focus {
+
+select:hover,
+.viterbi-dropdown:hover {
   border-color: var(--color-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+select:focus,
+.viterbi-dropdown:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
   outline: none;
 }
-#step-accuracy {
-  grid-column: 1 / span 2;
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
-@media (max-width: 900px) {
-  .simulation-flex-container {
-    flex-direction: column;
-    gap: 1.2em;
-  }
-  .sim-col1, .sim-col2 {
-    max-width: 95%;
-    margin: 0;
-  }
-  #result-panel {
-    min-height: 180px;
-    padding: 1.2em 1em 1em 1em;
-  }
-  .container-fluid {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-}
-#reset-container {
-  text-align: center;
-  margin-top: 0.1em;
-}
-#result-panel {
+
+/* Tables */
+table,
+.viterbi-table,
+.emission-matrix-table,
+.transition-matrix-table {
+  width: auto; /* Natural width based on content */
+  border-collapse: collapse;
+  margin: 1rem auto; /* Center tables horizontally */
   background: #fff;
-  border: 2px solid var(--color-primary-light);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  min-height: 0;
-  min-width: 0;
-  padding: 0.7em 0.7em 0.7em 0.7em;
-  margin-bottom: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  flex-grow: 1;
-}
-.result-heading {
-  color: var(--color-primary-dark);
-  font-size: 1.8em;
-  font-weight: 700;
-  margin-top: 0.1em;
-  margin-bottom: 0.1em;
-  text-align: center;
-}
-#result-content {
-  width: 100%;
-  min-height: 120px;
-  text-align: left;
-  font-size: 1.5em;
-}
-.sim-button {
-  background: linear-gradient(90deg, var(--color-primary) 60%, var(--color-secondary) 100%);
-  color: #fff;
-  border: none;
   border-radius: var(--radius-md);
-  padding: 0.6em 1.5em;
-  font-size: 1.5em;
-  margin-top: 1.5em;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, opacity 0.2s;
+  overflow: hidden;
   box-shadow: var(--shadow-md);
-  opacity: 1;
-}
-.sim-button:disabled, .sim-button[disabled] {
-  background: linear-gradient(90deg, #e0e7ef 60%, #d0f0f7 100%);
-  color: #b0b0b0;
-  cursor: not-allowed;
-  opacity: 0.7;
-  box-shadow: none;
-}
-
-/* Dropdown styling */
-select {
-  padding: 0.3em 0.7em;
-  font-size: 1em;
-  margin: 0.2em 0.5em 0.2em 0;
-  border-radius: 4px;
-  border: 1px solid #aaa;
-}
-
-/* Readonly input styling */
-input[readonly] {
-  background: #f5f5f5;
-  border: 1px solid #ccc;
-  color: #333;
-  padding: 0.3em 0.7em;
-  margin: 0.2em 0.5em 0.2em 0;
-  border-radius: 4px;
-}
-
-/* Button styling */
-button {
-  padding: 0.4em 1.2em;
-  font-size: 1em;
-  background: #337ab7;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 0.5em;
-}
-button:disabled {  
-  cursor: not-allowed;
-}
-
-/* Accuracy display */
-#accuracy_ans {
-  color: #2e7d32;
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-top: 1em;
-}
-
-/* Info text */
-div[style*='color:blue'] {
-  margin-bottom: 0.7em;
-  font-size: 1.08em;
-}
-
-.sim-sidebar {
-  background: var(--color-neutral-100);
-  border: 2px solid var(--color-primary-light);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: 2em 1.5em 1.5em 1.5em;
-  margin-right: 2em;
-  min-width: 260px;
-  max-width: 320px;
-  font-size: 1.08em;
-  color: var(--color-primary-dark);
-  align-self: flex-start;
-}
-.sim-sidebar h2 {
-  font-size: 1.4em;
-  color: var(--color-primary-dark);
-  margin-top: 0;
-}
-.sim-sidebar ul {
-  margin: 0.7em 0 1.2em 1.2em;
-  padding: 0;
-}
-.sim-sidebar .pos-tag-legend {
-  margin-top: 1.5em;
-  background: var(--color-neutral-50);
-  border-radius: var(--radius-md);
-  padding: 1em 1.2em;
   border: 1px solid var(--color-neutral-200);
+  table-layout: auto;
 }
-.sim-sidebar .pos-tag-legend h3 {
-  font-size: 1.1em;
-  margin-top: 0;
-  color: var(--color-primary);
+
+.viterbi-table-container {
+  margin: 1rem 0;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: auto; /* Size based on table content */
+  max-width: 100%;
+  display: flex; /* Use flexbox for centering */
+  justify-content: center; /* Center the table horizontally */
 }
-.tag-sample {
-  display: inline-block;
-  background: var(--color-secondary-light);
-  color: var(--color-primary-dark);
-  border-radius: 0.4em;
-  padding: 0.1em 0.5em;
-  font-size: 0.98em;
+
+table th,
+.viterbi-table th,
+.emission-matrix-table th,
+.transition-matrix-table th {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+  padding: 1rem 0.75rem;
   font-weight: 600;
-  margin: 0 0.2em;
+  text-align: center;
+  border: 1px solid var(--color-neutral-300);
+  font-size: 0.95em;
+  letter-spacing: 0.01em;
+}
+
+table td,
+.viterbi-table td,
+.emission-matrix-table td,
+.transition-matrix-table td {
+  padding: 0.75rem;
+  text-align: center;
+  border: 1px solid var(--color-neutral-300);
+  background: #fff;
+  font-size: 0.9em;
+  color: var(--color-neutral-800);
+}
+
+table tr:nth-child(even) td,
+.viterbi-table tr:nth-child(even) td {
+  background: var(--color-neutral-50);
+}
+
+table tr:hover td,
+.viterbi-table tr:hover td {
+  background: var(--color-neutral-100);
+}
+
+/* POS tags table styling */
+.pos-tags-table {
+  width: auto;
+  border-collapse: collapse;
+  margin: 1rem auto 0 auto;
+  background: #fff;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  table-layout: auto;
+}
+
+.pos-tags-table th {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+  padding: 1rem 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid var(--color-neutral-300);
+  font-size: 0.95em;
+  letter-spacing: 0.01em;
+}
+
+.pos-tags-table td {
+  padding: 0.75rem;
+  text-align: center;
+  border: 1px solid var(--color-neutral-300);
+  background: #fff;
+  font-size: 0.9em;
+  color: var(--color-neutral-800);
+  font-weight: 500;
+}
+
+.pos-tags-table .sim-pos-tag {
+  background: rgba(67, 97, 238, 0.1);
+  color: var(--color-primary-dark);
+  font-weight: 600;
+  padding: 0.75rem;
   border: 1px solid var(--color-primary-light);
 }
-.sim-maincol {
-  flex: 1 1 0;
-  min-width: 340px;
-  max-width: 700px;
+
+/* Input fields in tables */
+table input[type="text"],
+.viterbi-table input[type="text"],
+input.viterbi-input {
+  width: 100%;
+  max-width: 80px;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-size: 0.9em;
+  background: #fff;
+  color: var(--color-neutral-800);
+  transition: all 0.2s ease;
+}
+
+table input[type="text"]:focus,
+.viterbi-table input[type="text"]:focus,
+input.viterbi-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+  outline: none;
+}
+
+table input[type="text"].correct,
+.viterbi-table input[type="text"].correct,
+input.viterbi-input.correct {
+  border-color: var(--color-success);
+  background: rgba(76, 175, 80, 0.1);
+}
+
+table input[type="text"].incorrect,
+.viterbi-table input[type="text"].incorrect,
+input.viterbi-input.incorrect {
+  border-color: var(--color-error);
+  background: rgba(244, 67, 54, 0.1);
+}
+
+/* Buttons */
+.viterbi-controls,
+.button-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+}
+
+.btn,
+.sim-button,
+button {
+  border: none;
+  border-radius: 2.2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  margin: 0.2rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  text-decoration: none;
+  min-width: 120px;
+  justify-content: center;
+}
+
+/* Primary buttons (Check button) */
+.btn-primary,
+.sim-button,
+#viterbi-check-btn {
+  background: linear-gradient(
+    90deg,
+    var(--color-primary) 60%,
+    var(--color-secondary) 100%
+  );
+  color: #fff;
+}
+
+.btn-primary:hover,
+.sim-button:hover:not(:disabled),
+#viterbi-check-btn:hover:not(:disabled) {
+  background: linear-gradient(
+    90deg,
+    var(--color-primary-dark) 60%,
+    var(--color-accent) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Secondary buttons (Show Answer, Show Hint, Reset) */
+.btn-secondary,
+#show-answer-btn,
+#show-hint-btn,
+#restart-btn {
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary) 60%,
+    var(--color-accent-light) 100%
+  );
+  color: #fff;
+}
+
+.btn-secondary:hover,
+#show-answer-btn:hover:not(:disabled),
+#show-hint-btn:hover:not(:disabled),
+#restart-btn:hover:not(:disabled) {
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary-dark) 60%,
+    var(--color-accent) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Disabled buttons */
+.btn:disabled,
+.sim-button:disabled,
+button:disabled {
+  background: var(--color-neutral-400) !important;
+  color: var(--color-neutral-200) !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+  transform: none !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.btn:disabled:hover,
+.sim-button:disabled:hover,
+button:disabled:hover {
+  background: var(--color-neutral-400) !important;
+  box-shadow: var(--shadow-md) !important;
+  transform: none !important;
+}
+
+.viterbi-controls {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-neutral-200);
+  width: 100%; /* Full width to contain buttons and feedback */
   display: flex;
   flex-direction: column;
-  align-items: stretch;
 }
-.step-explanation {
-  background: var(--color-secondary-light);
-  color: var(--color-primary-dark);
-  border-left: 4px solid var(--color-primary);
-  padding: 0.5em 1em;
-  margin-bottom: 0.7em;
-  border-radius: var(--radius-md);
-  font-size: 1.08em;
-  box-shadow: 0 1px 4px rgba(67, 97, 238, 0.04);
-  text-align: left;
-}
-#example-pos-output {
-  background: var(--color-neutral-100);
-  border: 1.5px solid var(--color-primary-light);
+
+/* Feedback and Messages */
+.feedback-message,
+.sim-feedback {
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
   border-radius: var(--radius-lg);
-  margin-top: 1.5em;
-  padding: 1.2em 1.5em;
-  font-size: 1.08em;
-  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.06);
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.example-pos-sentence {
-  font-size: 1.15em;
-  margin-top: 0.7em;
-  color: var(--color-neutral-800);
-  word-break: break-word;
-}
-@media (max-width: 1100px) {
-  .simulation-flex-container.simulation-2col-grid {
-    flex-direction: column;
-  }
-  .sim-sidebar {
-    max-width: 100%;
-    margin-right: 1em;
-    margin-left: 1em;
-    margin-bottom: 2em;
-  }
-}
-#interactive-demo-panel {
-  background: #fff;
-  border: 2px solid var(--color-accent);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: 1.5em 2em;
-  margin-top: 2.5em;
+  border: 1px solid;
+  font-weight: 500;
   text-align: center;
+  display: none; /* Hidden by default */
 }
-#interactive-demo-panel h3 {
-  font-size: 1.5em;
-  color: var(--color-accent-dark);
-  margin-top: 0;
-  margin-bottom: 0.5em;
+
+.feedback-success {
+  background: rgba(76, 175, 80, 0.1);
+  border-left-color: var(--color-success);
+  color: var(--color-success);
 }
-#interactive-demo-panel p {
-  font-size: 1.05em;
-  margin-bottom: 1em;
+
+.feedback-error {
+  background: rgba(244, 67, 54, 0.1);
+  border-left-color: var(--color-error);
+  color: var(--color-error);
 }
-#demo-sentence-select {
-  width: 80%;
-  padding: 0.4em;
-  font-size: 1.05em;
+
+/* Hints */
+.sim-hint {
+  background: rgba(67, 97, 238, 0.1);
+  border-left: 4px solid var(--color-primary);
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-neutral-300);
+  font-size: 1em;
+  display: none;
+  color: var(--color-primary-dark);
 }
-#demo-sentence-output {
-  margin-top: 1.5em;
-  padding: 1em;
+
+/* Sentence Display */
+.sim-sentence {
+  font-size: 1.15em;
+  font-weight: 500;
+  color: var(--color-neutral-800);
+  line-height: 1.6;
+  text-align: center;
+  padding: 1rem 1.5rem;
   background: var(--color-neutral-100);
   border-radius: var(--radius-md);
-  min-height: 50px;
-  text-align: left;
+  border: 1px solid var(--color-neutral-200);
 }
-#check-accuracy.sim-button {
-  /* Inherit all .sim-button styles */
-}
-#result-demo-select {
-  width: 80%;
-  padding: 0.4em;
-  font-size: 1.05em;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-neutral-300);
-  margin-top: 1.5em;
-}
-#result-demo-output {
-  margin-top: 1.5em;
-  padding: 1em;
-  background: var(--color-neutral-100);
-  border-radius: var(--radius-md);
-  min-height: 50px;
-  text-align: left;
-}
-#step-accuracy-container {
+
+/* Test sentence header with inline title and info icon */
+.sim-sentence-header {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: auto;
-  height: auto;
-  min-width: 0;
-  min-height: 0;
-  margin: 0.5em auto 0.5em auto;
-  padding: 0;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
-#instructions-bar {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto 16px auto;
-  cursor: pointer;
-  background: #e3f2fd;
-  color: #1565c0;
-  border-radius: 6px 6px 0 0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+
+/* Left pane layout - title on separate line */
+#full-sentence .sim-sentence-header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+/* Right pane layout - title inline with sentence and icon */
+#fldiv .sim-sentence-header {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sim-sentence-header .sim-section-title {
+  margin-bottom: 0.25rem;
   font-weight: 600;
-  padding: 10px 18px;
+  color: var(--color-neutral-800);
+}
+
+/* In right pane, remove bottom margin from title */
+#fldiv .sim-sentence-header .sim-section-title {
+  margin-bottom: 0;
+}
+
+.sim-sentence-text {
+  font-weight: normal;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.5;
+}
+
+/* Info icon styling identical to Markov experiment */
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+  border-radius: 50%;
+  background-color: var(--color-primary-dark);
+  color: white;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+  cursor: help;
+  transition: background-color 0.2s ease;
+  vertical-align: middle;
+  border: none;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.info-icon:hover {
+  background-color: var(--color-primary);
+}
+
+.info-icon:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Modal overlay and content */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-header {
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--color-neutral-200);
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-#instructions-bar:hover {
-  background: #bbdefb;
+
+.modal-header h3 {
+  margin: 0;
+  color: var(--color-neutral-800);
+  font-size: 1.25rem;
+  font-weight: 600;
 }
-#instructions-arrow {
-  transition: transform 0.2s;
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
 }
-#instructions-arrow.rotated {
-  transform: rotate(180deg);
+
+.modal-close:hover {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
 }
-#instructions-content {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto 24px auto;
-  background: #f8fafc;
-  color: #222;
-  border-radius: 0 0 6px 6px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-  padding: 18px 22px 14px 22px;
-  display: none;
-  font-size: 15px;
+
+.modal-close:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
-@media (max-width: 900px) {
-  #instructions-bar, #instructions-content {
-    max-width: 98vw;
-    width: 100%;
-    padding-left: 6px;
-    padding-right: 6px;
+
+.modal-body {
+  padding: 1rem 1.5rem;
+  color: var(--color-neutral-700);
+  line-height: 1.6;
+}
+
+.modal-body ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.modal-body li {
+  margin-bottom: 0.5rem;
+}
+
+.modal-body strong {
+  color: var(--color-neutral-800);
+  font-weight: 600;
+}
+
+.modal-body em {
+  color: var(--color-primary);
+  font-style: italic;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--color-neutral-200);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Responsive modal */
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .modal-content {
+    max-height: 90vh;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .sim-sentence-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .info-icon {
+    align-self: flex-end;
+    margin-left: 0;
   }
 }
+
+/* Desktop Layout - when screen is wide enough */
+@media (min-width: 1200px) {
+  #main-2pane-container {
+    flex-direction: row;
+    gap: 2rem;
+    max-width: 100vw;
+    width: 100%;
+    margin: 2rem auto;
+    overflow-x: auto;
+    justify-content: center; /* Center the panes and distribute remaining space */
+    padding: 0 2rem; /* Add padding on outer sides */
+  }
+
+  #left-pane {
+    flex: 0 0 auto; /* Size based on content */
+    width: auto; /* Let content determine width */
+    min-width: 0; /* Allow shrinking if needed */
+    max-width: none; /* No artificial max width */
+  }
+
+  #right-pane {
+    flex: 0 0 auto; /* Size based on content */
+    width: auto; /* Let content determine width */
+    min-width: 0; /* Allow shrinking if needed */
+    max-width: none; /* No artificial max width */
+  }
+
+  /* Allow content-based sizing for sections */
+  .viterbi-table-container {
+    overflow-x: auto;
+    width: auto; /* Let content determine width */
+    max-width: 100%;
+  }
+
+  .viterbi-section,
+  .matrices-section {
+    overflow-x: auto;
+    width: auto; /* Let content determine section width */
+  }
+
+  /* Ensure matrices size naturally */
+  .matrices-section table {
+    width: auto; /* Natural table width */
+    max-width: none; /* Remove max width constraint */
+  }
+
+  /* Keep controls full width and properly structured */
+  .viterbi-section .viterbi-controls {
+    width: 100%; /* Full width in the section */
+    max-width: none; /* Remove max width constraint */
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* Tablet Layout */
+@media (min-width: 768px) and (max-width: 1199px) {
+  #main-2pane-container {
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: none; /* Remove width constraint for wide tables */
+    margin: 1.5rem auto;
+    overflow-x: auto; /* Allow horizontal scrolling for wide content */
+    padding: 0 1rem;
+  }
+
+  #left-pane,
+  #right-pane {
+    width: 100%;
+    max-width: none; /* Allow full table width */
+    min-width: 0;
+  }
+
+  .viterbi-section,
+  .matrices-section {
+    padding: 1.25rem;
+  }
+
+  /* Tablet-specific button layout */
+  .viterbi-buttons-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .btn,
+  .sim-button {
+    flex: 1;
+    min-width: 140px;
+    max-width: 200px;
+  }
+
+  /* Responsive info icon for tablets */
+  .info-icon {
+    width: 21px;
+    height: 21px;
+    min-width: 21px;
+    min-height: 21px;
+    font-size: 0.72rem;
+  }
+
+  /* Table responsive adjustments for tablets */
+  table,
+  .viterbi-table,
+  .pos-tags-table {
+    font-size: 0.9em;
+  }
+
+  table th,
+  .viterbi-table th,
+  .pos-tags-table th {
+    padding: 0.8rem 0.6rem;
+    font-size: 0.9em;
+  }
+
+  table td,
+  .viterbi-table td,
+  .pos-tags-table td {
+    padding: 0.65rem 0.5rem;
+    font-size: 0.85em;
+  }
+
+  table input[type="text"],
+  .viterbi-table input[type="text"],
+  input.viterbi-input {
+    max-width: 70px;
+    font-size: 0.85em;
+  }
+}
+
+/* Mobile Layout */
+@media (max-width: 767px) {
+  .main-content {
+    padding: 0 0.5rem;
+  }
+
+  #instructions-bar {
+    margin: 1rem auto;
+    padding: 0.75rem 1rem;
+  }
+
+  .instructions-label {
+    font-size: 1.1em;
+  }
+
+  .arrow-icon {
+    right: 1rem;
+  }
+
+  #instructions-content {
+    padding: 1rem 1.5rem;
+  }
+
+  #main-2pane-container {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 0.5rem;
+    margin: 1rem auto;
+    overflow-x: auto; /* Allow horizontal scrolling for wide tables */
+  }
+
+  #left-pane,
+  #right-pane {
+    width: 100%;
+    max-width: none; /* Allow tables to expand naturally */
+    min-width: 0; /* Allow shrinking */
+  }
+
+  .viterbi-section,
+  .matrices-section,
+  #corpus-selection,
+  #corpus-info {
+    padding: 1rem;
+  }
+
+  /* Section titles responsive */
+  .sim-section-title,
+  .viterbi-section-title {
+    font-size: 1.15em;
+    text-align: center;
+  }
+
+  /* Info icon responsive positioning */
+  .info-icon {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    font-size: 0.7rem;
+    margin-left: 0.35rem;
+  }
+
+  /* Responsive sentence headers */
+  .sim-sentence-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  /* Center info icon below title on mobile */
+  #fldiv .sim-sentence-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  #fldiv .sim-sentence-header .info-icon {
+    margin-left: 0;
+    margin-top: 0.25rem;
+  }
+
+  .viterbi-controls,
+  .button-controls {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  .viterbi-buttons-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .btn,
+  .sim-button {
+    width: 100%;
+    margin: 0;
+    min-width: auto;
+    font-size: 0.95rem;
+    padding: 0.65rem 1rem;
+  }
+
+  /* Make tables scroll horizontally on mobile if needed */
+  .viterbi-table-container {
+    overflow-x: auto;
+    width: 100%;
+    margin: 0.75rem 0;
+  }
+
+  .viterbi-section,
+  .matrices-section {
+    overflow-x: auto; /* Allow horizontal scrolling on mobile */
+    padding: 0.75rem;
+  }
+
+  /* Responsive table sizing */
+  table,
+  .viterbi-table,
+  .pos-tags-table {
+    min-width: 480px; /* Reduced min-width for better mobile fit */
+    font-size: 0.85em;
+  }
+
+  table th,
+  .viterbi-table th,
+  .pos-tags-table th {
+    padding: 0.6rem 0.4rem;
+    font-size: 0.8em;
+  }
+
+  table td,
+  .viterbi-table td,
+  .pos-tags-table td {
+    padding: 0.5rem 0.3rem;
+    font-size: 0.8em;
+  }
+
+  /* Responsive input fields */
+  table input[type="text"],
+  .viterbi-table input[type="text"],
+  input.viterbi-input {
+    max-width: 65px;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8em;
+  }
+
+  /* Responsive feedback and hints */
+  .feedback-message,
+  #viterbi-feedback {
+    padding: 0.75rem 1rem;
+    font-size: 0.9em;
+  }
+
+  #sim-hint .sim-hint {
+    padding: 0.75rem 1rem;
+    font-size: 0.85em;
+  }
+
+  /* Modal responsive adjustments */
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .modal-content {
+    max-height: 85vh;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .modal-body {
+    font-size: 0.9em;
+    line-height: 1.5;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .main-content {
+    padding: 0 0.25rem;
+  }
+
+  #instructions-bar {
+    margin: 0.75rem auto;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .instructions-label {
+    font-size: 1em;
+  }
+
+  .arrow-icon {
+    right: 0.75rem;
+    font-size: 1em;
+  }
+
+  #instructions-content {
+    padding: 0.75rem 1rem;
+  }
+
+  #main-2pane-container {
+    padding: 0 0.25rem;
+    margin: 0.75rem auto;
+  }
+
+  .sim-section-title,
+  .viterbi-section-title {
+    font-size: 1em;
+    margin-bottom: 0.75rem;
+  }
+
+  .viterbi-section,
+  .matrices-section,
+  #corpus-selection,
+  #corpus-info {
+    padding: 0.75rem;
+  }
+
+  /* Ultra-compact info icon */
+  .info-icon {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    font-size: 0.65rem;
+    margin-left: 0.25rem;
+  }
+
+  /* Ultra-compact sentence headers */
+  .sim-sentence-header {
+    gap: 0.25rem;
+  }
+
+  /* Ultra-compact tables */
+  table,
+  .viterbi-table,
+  .pos-tags-table {
+    min-width: 320px; /* Further reduced for very small screens */
+    font-size: 0.75em;
+  }
+
+  table th,
+  .viterbi-table th,
+  .pos-tags-table th {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.7em;
+  }
+
+  table td,
+  .viterbi-table td,
+  .pos-tags-table td {
+    padding: 0.35rem 0.15rem;
+    font-size: 0.7em;
+  }
+
+  table input[type="text"],
+  input.viterbi-input {
+    max-width: 50px;
+    padding: 0.25rem 0.3rem;
+    font-size: 0.7em;
+  }
+
+  /* Ultra-compact buttons */
+  .btn,
+  .sim-button {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    min-height: 40px;
+  }
+
+  /* Ultra-compact controls */
+  .viterbi-controls {
+    padding: 0.75rem;
+    margin: 0.75rem 0;
+  }
+
+  .viterbi-buttons-row {
+    gap: 0.4rem;
+  }
+
+  /* Ultra-compact feedback */
+  .feedback-message,
+  #viterbi-feedback {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8em;
+  }
+
+  #sim-hint .sim-hint {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8em;
+  }
+
+  /* Ultra-compact modal */
+  .modal-overlay {
+    padding: 0.25rem;
+  }
+
+  .modal-content {
+    max-height: 90vh;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: 0.75rem;
+  }
+
+  .modal-body {
+    font-size: 0.85em;
+  }
+
+  .modal-header h3 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Extra responsive breakpoint for medium-small screens */
+@media (min-width: 481px) and (max-width: 640px) {
+  .sim-sentence-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  #fldiv .sim-sentence-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #fldiv .sim-sentence-header .info-icon {
+    margin-left: 0.4rem;
+    margin-top: 0;
+  }
+
+  .viterbi-buttons-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .btn,
+  .sim-button {
+    flex: 1;
+    min-width: 120px;
+    max-width: 180px;
+  }
+}
+
+/* Button layout - all buttons in one row */
+.viterbi-buttons-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Feedback area - full width below buttons */
+#viterbi-feedback {
+  width: 100%;
+  margin: 0;
+  padding: 1rem 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Hint area - full width */
+#sim-hint {
+  width: 100%;
+  margin: 1rem 0 0 0;
+  display: none !important; /* Hidden by default */
+}
+
+#sim-hint.show,
+#sim-hint:not(:empty) {
+  display: block !important;
+}
+
+#sim-hint .sim-hint {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0.5rem 0;
+  padding: 1rem 1.5rem;
+  background: #f6faff;
+  border: 1px solid #e3f2fd;
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  color: var(--color-neutral-700);
+  font-size: 0.95em;
+  line-height: 1.5;
+  box-shadow: 0 2px 4px rgba(67, 97, 238, 0.08);
+  display: block !important;
+}
+
+#sim-hint .sim-hint:first-child {
+  margin-top: 0;
+}
+
+#sim-hint .sim-hint:last-child {
+  margin-bottom: 0;
+}
+
+/* Ensure POS tags section displays properly in feedback area */
+#viterbi-feedback .pos-tags-section {
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content in the section */
+}
+
+#viterbi-feedback .pos-tags-section .sim-section-title {
+  text-align: center; /* Center the title */
+  margin-bottom: 1rem;
+  align-self: stretch; /* Allow title to take full width */
+}
+
+#viterbi-feedback .pos-tags-table {
+  margin: 1rem auto 0 auto; /* Center the table */
+}
+
+/*# sourceMappingURL=main.css.map */

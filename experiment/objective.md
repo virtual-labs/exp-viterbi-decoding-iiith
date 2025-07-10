@@ -1,7 +1,21 @@
-### Objectives
+By the end of this experiment, participants will be able to:
 
-- To understand the concept of Part-of-Speech (POS) tagging in NLP.
-- To learn about Hidden Markov Models (HMMs) and their application in POS tagging.
-- To construct and interpret emission and transition matrices from a training corpus.
-- To apply the Viterbi algorithm to determine the most probable sequence of POS tags for a test sentence.
-- To interactively practice Viterbi decoding and analyze the results using the provided simulation.
+1. **Understand the Viterbi algorithm** as a dynamic programming solution for finding the most likely sequence of hidden states in Hidden Markov Models.
+
+2. **Comprehend the mathematical foundations** of Viterbi decoding, including the recursive computation of maximum probabilities and backtracking for optimal path recovery.
+
+3. **Interpret emission and transition matrices** derived from training corpora and understand their role in statistical POS tagging.
+
+4. **Apply the Viterbi algorithm step-by-step** to decode POS tag sequences for test sentences using pre-computed probability matrices.
+
+5. **Fill Viterbi tables systematically** by computing maximum probabilities for each word-tag combination and maintaining backpointers for path reconstruction.
+
+6. **Analyze the decoding process** by understanding how the algorithm balances emission probabilities (word-tag likelihood) with transition probabilities (tag sequence likelihood).
+
+7. **Compare different corpus examples** to observe how training data characteristics affect the resulting probability distributions and decoding outcomes.
+
+8. **Evaluate the efficiency** of dynamic programming in solving the exponential search space problem of finding optimal tag sequences.
+
+9. **Understand practical applications** of the Viterbi algorithm beyond POS tagging, including speech recognition, bioinformatics, and other sequence labeling tasks.
+
+10. **Practice interactive problem-solving** through hands-on simulation exercises that reinforce theoretical understanding with practical implementation.
