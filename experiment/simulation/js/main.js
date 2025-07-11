@@ -97,8 +97,99 @@ function closeTestSentenceModal(event) {
   $(".info-icon").focus();
 }
 
+// Setup instructions panel functionality
+function setupInstructionsPanel() {
+  const tab = document.getElementById("instructionsTab");
+  const instructionsContent = document.getElementById("instructionsContent");
+  const toggleIcon = tab ? tab.querySelector(".toggle-icon") : null;
+
+  if (tab && instructionsContent) {
+    // Collapsed by default
+    instructionsContent.classList.add("collapsed");
+
+    tab.addEventListener("click", () => {
+      const isCollapsed = instructionsContent.classList.contains("collapsed");
+      if (isCollapsed) {
+        instructionsContent.classList.remove("collapsed");
+        if (toggleIcon) {
+          toggleIcon.classList.remove("fa-chevron-down");
+          toggleIcon.classList.add("fa-chevron-up");
+        }
+      } else {
+        instructionsContent.classList.add("collapsed");
+        if (toggleIcon) {
+          toggleIcon.classList.remove("fa-chevron-up");
+          toggleIcon.classList.add("fa-chevron-down");
+        }
+      }
+    });
+  }
+}
+
+// Function to synchronize instructions panel width with main-2pane-container
+function syncInstructionsPanelWidth() {
+  const instructionsPanel = document.querySelector(".instructions-panel");
+  const main2paneContainer = document.getElementById("main-2pane-container");
+
+  if (instructionsPanel && main2paneContainer) {
+    // Get the computed width of main-2pane-container
+    const containerWidth = main2paneContainer.offsetWidth;
+
+    // Apply the same width to instructions panel
+    instructionsPanel.style.width = containerWidth + "px";
+  }
+}
+
+// Function to setup width synchronization with observers and event listeners
+function setupWidthSynchronization() {
+  // Initial sync
+  syncInstructionsPanelWidth();
+
+  // Sync on window resize
+  window.addEventListener("resize", () => {
+    // Use requestAnimationFrame to ensure layout is updated
+    requestAnimationFrame(syncInstructionsPanelWidth);
+  });
+
+  // Create a ResizeObserver to watch for changes in main-2pane-container
+  if (window.ResizeObserver) {
+    const main2paneContainer = document.getElementById("main-2pane-container");
+    if (main2paneContainer) {
+      const resizeObserver = new ResizeObserver(() => {
+        syncInstructionsPanelWidth();
+      });
+      resizeObserver.observe(main2paneContainer);
+    }
+  }
+
+  // Create a MutationObserver to watch for content changes that might affect width
+  const main2paneContainer = document.getElementById("main-2pane-container");
+  if (main2paneContainer) {
+    const mutationObserver = new MutationObserver(() => {
+      // Delay to allow DOM updates to complete
+      setTimeout(syncInstructionsPanelWidth, 100);
+    });
+
+    mutationObserver.observe(main2paneContainer, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["style", "class"],
+    });
+  }
+}
+
 // Load corpora.json and populate dropdown
 $(document).ready(function () {
+  // Setup instructions panel first
+  setupInstructionsPanel();
+
+  // Setup width synchronization
+  setupWidthSynchronization();
+
+  // Setup matrix toggles
+  setupMatrixToggles();
+
   $.getJSON("data/corpora.json", function (corpora) {
     // Create dropdown with modern styling
     var $select = $('<select name="option" id="corpus-select"></select>');
@@ -117,6 +208,8 @@ $(document).ready(function () {
     $("#full-sentence").html("");
     $("#fldiv").html("");
     $("#matrices-pane").html("");
+    $("#emission-matrix-container").html("");
+    $("#transition-matrix-container").html("");
 
     // Select Corpus A by default and trigger change
     setTimeout(function () {
@@ -130,6 +223,8 @@ $(document).ready(function () {
         $("#full-sentence").html("");
         $("#fldiv").html("");
         $("#matrices-pane").html("");
+        $("#emission-matrix-container").html("");
+        $("#transition-matrix-container").html("");
         $("#viterbi-feedback").hide();
         $("#sim-hint").hide();
         currentCorpusKey = null;
@@ -158,23 +253,13 @@ $(document).ready(function () {
               "</div>" +
               "</div>"
           );
-          // Render matrices below test sentence in left pane
-          $("#matrices-pane").html(
-            '<div class="sim-section-title">Emission Matrix</div>' +
-              renderMatrixTable(
-                corpusObj.emission,
-                corpusObj.pos,
-                corpusObj.words
-              ) +
-              '<div class="sim-section-title" style="margin-top:18px;">Transition Matrix</div>' +
-              renderMatrixTable(
-                corpusObj.transition,
-                corpusObj.pos,
-                corpusObj.pos
-              )
-          );
+          // Render collapsible matrices
+          renderCollapsibleMatrices(corpusObj);
           // Render simulation in right pane
           renderSimulation(corpusObj);
+
+          // Sync instructions panel width after content is loaded
+          setTimeout(syncInstructionsPanelWidth, 100);
         },
         error: function () {
           $("#full-sentence").html("");
@@ -182,6 +267,8 @@ $(document).ready(function () {
             '<div class="feedback-message feedback-error">Failed to load corpus file.</div>'
           );
           $("#matrices-pane").html("");
+          $("#emission-matrix-container").html("");
+          $("#transition-matrix-container").html("");
         },
       });
     });
@@ -294,6 +381,9 @@ function renderSimulation(corpus) {
 
   $("#fldiv").html(html);
   renderViterbiTableAndControls(corpus);
+
+  // Sync instructions panel width after rendering
+  setTimeout(syncInstructionsPanelWidth, 50);
 }
 
 function renderMatrixTable(matrix, rowLabels, colLabels) {
@@ -674,3 +764,93 @@ function showViterbiAnswer(corpus, userInput) {
     '<div style="font-size:0.9em;margin-top:12px;text-align:center;color:#666;">Legend: <span style="color:#388e3c;font-weight:bold;">Green</span> = Correct, <span style="color:#d32f2f;font-weight:bold;">Red</span> = Incorrect, <b>N/A</b> = Not Available in data</div>';
   $("#viterbi-feedback").html(html).show();
 }
+
+// Matrix toggle functionality
+// Legacy function - no longer needed with tabbed interface
+function setupMatrixToggles() {
+  // This function is kept for compatibility but does nothing
+  // The new tabbed interface is handled by setupMatrixTabs()
+}
+
+// Enhanced matrix rendering for collapsible sections
+function renderCollapsibleMatrices(corpusObj) {
+  // Render emission matrix
+  const emissionHTML = renderMatrixTable(
+    corpusObj.emission,
+    corpusObj.pos,
+    corpusObj.words
+  );
+
+  // Render transition matrix
+  const transitionHTML = renderMatrixTable(
+    corpusObj.transition,
+    corpusObj.pos,
+    corpusObj.pos
+  );
+
+  // Create the tabbed interface structure
+  const matricesHTML = `
+    <div class="matrices-headers">
+      <div class="matrix-title active" data-matrix="emission">
+        <i class="fas fa-table"></i>Emission Matrix
+      </div>
+      <div class="matrix-title" data-matrix="transition">
+        <i class="fas fa-exchange-alt"></i>Transition Matrix
+      </div>
+    </div>
+    <div class="matrix-content-area">
+      <div id="emission-matrix-display" class="matrix-table-display active">
+        ${emissionHTML}
+      </div>
+      <div id="transition-matrix-display" class="matrix-table-display">
+        ${transitionHTML}
+      </div>
+    </div>
+  `;
+
+  // Update the matrices section
+  document.getElementById("emission-matrix-container").innerHTML = matricesHTML;
+
+  // Clear the transition matrix container since we're using a single tabbed interface
+  document.getElementById("transition-matrix-container").innerHTML = "";
+
+  // Keep legacy matrices-pane for compatibility but hide it
+  $("#matrices-pane").html(
+    '<div class="sim-section-title">Emission Matrix</div>' +
+      emissionHTML +
+      '<div class="sim-section-title" style="margin-top:18px;">Transition Matrix</div>' +
+      transitionHTML
+  );
+
+  // Setup the matrix tab functionality
+  setupMatrixTabs();
+}
+
+// Setup matrix tab functionality
+function setupMatrixTabs() {
+  // Remove any existing event listeners
+  $(document).off("click", ".matrix-title");
+
+  // Add click handler for matrix tabs
+  $(document).on("click", ".matrix-title", function () {
+    const matrixType = $(this).data("matrix");
+
+    // Remove active class from all tabs
+    $(".matrix-title").removeClass("active");
+
+    // Add active class to clicked tab
+    $(this).addClass("active");
+
+    // Hide all matrix displays
+    $(".matrix-table-display").removeClass("active");
+
+    // Show the selected matrix display
+    $(`#${matrixType}-matrix-display`).addClass("active");
+  });
+}
+
+// Initialize matrix tab functionality
+$(document).ready(function () {
+  // The setupMatrixTabs function will be called after renderCollapsibleMatrices
+  // No need for additional initialization here since the function handles everything
+});

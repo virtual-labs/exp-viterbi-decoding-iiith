@@ -46,6 +46,45 @@ body {
   overflow-x: visible;
 }
 
+/* Ensure consistent font inheritance across all text elements */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+div,
+span,
+label,
+input,
+select,
+textarea,
+button,
+th,
+td,
+li,
+ul,
+ol,
+.sim-section-title,
+.sim-sentence-text,
+.sim-sentence-header,
+.instructions-list,
+.instructions-header,
+.viterbi-table,
+.pos-tags-table,
+.emission-matrix-table,
+.transition-matrix-table,
+.feedback-message,
+.sim-feedback,
+.sim-hint,
+.btn,
+.sim-button,
+.matrix-title,
+.matrix-content-area {
+  font-family: inherit !important;
+}
+
 .container {
   max-width: 100vw; /* Use full viewport width */
   margin: 0 auto;
@@ -63,78 +102,126 @@ body {
   width: 100%;
   max-width: 100vw; /* Use full viewport width */
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0; /* Remove base padding - let children handle their own spacing */
   box-sizing: border-box;
   min-width: 0; /* Allow shrinking */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center children horizontally */
+}
+
+/* Ensure proper order for all screens */
+.instructions-panel {
+  order: 0; /* Instructions panel first */
+}
+
+#main-2pane-container {
+  order: 1; /* Main content second */
+  padding: 0; /* No padding - pure content width */
+  margin: 0; /* No margin - pure content width */
 }
 
 /* Instructions Panel */
-#instructions-bar {
-  width: 100%;
-  max-width: 1040px;
-  margin: 1.5rem auto;
-  background: linear-gradient(90deg, #6ef2e6 0%, #4895ef 100%);
-  border-radius: var(--radius-lg);
-  cursor: pointer;
-  user-select: none;
-  transition: all 0.2s ease;
+.instructions-panel {
+  order: 0; /* Instructions panel first */
+  width: auto; /* Will match main-2pane-container width automatically */
+  max-width: none;
+  margin: 0.1rem auto; /* Further reduced margin for minimal gap */
+  box-sizing: border-box;
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
   justify-content: center;
+  padding: 0;
+  border-radius: 0;
+}
+
+.instructions-header {
+  display: flex;
   align-items: center;
-  position: relative;
-  box-shadow: var(--shadow-md);
-  padding: 1rem 2rem;
-  border: 1px solid var(--color-neutral-200);
+  padding: 1rem 1.5rem;
+  background: linear-gradient(90deg, #6ef2e6 0%, #4895ef 100%);
+  border-bottom: 1px solid var(--color-neutral-200);
+  cursor: pointer;
+  transition: background 0.2s;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
-#instructions-bar:hover {
+.instructions-header:hover {
   background: linear-gradient(90deg, #72efdd 0%, #4895ef 100%);
-  box-shadow: var(--shadow-lg);
 }
 
-.instructions-label {
+.instructions-header h3 {
+  margin: 0 0 0 0.5rem;
+  color: var(--color-primary-dark);
+  flex-grow: 1;
   font-weight: 700;
-  color: var(--color-primary-dark);
-  font-size: 1.2em;
-  letter-spacing: 0.01em;
+  font-size: 1.15em;
   text-align: center;
-  flex: 1;
 }
 
-.arrow-icon {
-  position: absolute;
-  right: 2rem;
-  font-size: 1.2em;
+.toggle-btn {
+  background: none;
+  border: none;
   color: var(--color-primary-dark);
-  transition: transform 0.2s ease;
+  cursor: pointer;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
-.arrow-icon.rotated {
-  transform: rotate(180deg);
+.toggle-btn:hover {
+  background-color: rgba(67, 97, 238, 0.1);
+  transform: translateY(-1px);
 }
 
-#instructions-content {
+.instructions-content {
+  padding: 0.7rem 0.5rem;
+  max-width: 100%;
   width: 100%;
-  max-width: 1040px;
-  margin: 0 auto 2rem auto;
-  background: #fff;
-  border: 1px solid var(--color-neutral-200);
-  border-top: none;
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-  padding: 1.5rem 2rem;
-  box-shadow: var(--shadow-md);
+  box-sizing: border-box;
+  background: var(--color-neutral-100);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.04);
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  opacity: 1;
+  max-height: 400px;
+}
+
+.instructions-content.collapsed {
+  display: block;
+  opacity: 0;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.instructions-list {
+  list-style: disc inside;
+  margin: 0.2em 0 0.2em 1em;
+  padding: 0;
+  font-size: 1em;
+  color: var(--color-neutral-800);
+  line-height: 1.5;
+}
+
+.instructions-list li {
+  margin-bottom: 0.3em;
+}
+
+/* Legacy support for existing HTML structure */
+#instructions-bar {
   display: none;
 }
 
-#instructions-content ol {
-  margin: 0;
-  padding-left: 1.5rem;
-  line-height: 1.7;
-}
-
-#instructions-content li {
-  margin-bottom: 0.8rem;
-  color: var(--color-neutral-800);
+#instructions-content {
+  display: none;
 }
 
 /* Main Layout - 2-pane container */
@@ -142,9 +229,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 1rem;
+  width: fit-content; /* Size based on content: left-pane + gap + right-pane */
+  margin: 0 auto; /* Center horizontally */
+  padding: 0; /* No padding - pure content width */
   box-sizing: border-box;
   transition: all 0.3s ease;
   min-width: 0;
@@ -156,7 +243,7 @@ body {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 0.5rem;
   transition: all 0.3s ease;
 }
 
@@ -175,7 +262,7 @@ body {
 #corpus-info {
   background: #fff;
   border-radius: var(--radius-lg);
-  padding: 1.5rem;
+  padding: 1rem;
   box-shadow: var(--shadow-md);
   border: 1px solid var(--color-neutral-200);
 }
@@ -222,7 +309,7 @@ body {
 .viterbi-section-title {
   color: var(--color-primary-dark);
   font-size: 1.3em;
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.1rem 0;
   font-weight: 700;
   letter-spacing: 0.01em;
   text-align: center; /* Center section titles */
@@ -267,6 +354,7 @@ select,
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 1rem;
+  margin-top: 1rem;
   box-shadow: var(--shadow-md);
   transition: all 0.2s ease;
   cursor: pointer;
@@ -308,7 +396,7 @@ table,
 }
 
 .viterbi-table-container {
-  margin: 1rem 0;
+  margin: 0.2rem 0;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   overflow-x: auto;
@@ -599,7 +687,8 @@ button:disabled:hover {
 /* Test sentence header with inline title and info icon */
 .sim-sentence-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   margin-bottom: 1rem;
   flex-wrap: wrap;
@@ -608,7 +697,8 @@ button:disabled:hover {
 /* Left pane layout - title on separate line */
 #full-sentence .sim-sentence-header {
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   gap: 0.25rem;
 }
 
@@ -635,6 +725,7 @@ button:disabled:hover {
   flex: 1;
   min-width: 0;
   line-height: 1.5;
+  text-align: center;
 }
 
 /* Info icon styling identical to Markov experiment */
@@ -714,7 +805,7 @@ button:disabled:hover {
   border: none;
   color: var(--color-neutral-500);
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0;
   border-radius: 50%;
   transition: all 0.2s ease;
   display: flex;
@@ -722,6 +813,18 @@ button:disabled:hover {
   justify-content: center;
   width: 2rem;
   height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
+  flex-shrink: 0;
+  aspect-ratio: 1;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.modal-close i {
+  display: block;
+  font-size: inherit;
+  line-height: 1;
 }
 
 .modal-close:hover {
@@ -797,15 +900,25 @@ button:disabled:hover {
 
 /* Desktop Layout - when screen is wide enough */
 @media (min-width: 1200px) {
+  .main-content {
+    padding: 0 2rem; /* Outer padding for page layout */
+  }
+
+  /* Main-2pane-container defines the exact content width: left-pane + gap + right-pane */
   #main-2pane-container {
     flex-direction: row;
-    gap: 2rem;
-    max-width: 100vw;
-    width: 100%;
-    margin: 2rem auto;
+    gap: 2rem; /* Gap between panes */
+    width: fit-content; /* Size based on content: left-pane + gap + right-pane */
+    margin: 2rem auto; /* Center horizontally */
+    padding: 0; /* No padding - pure content width */
     overflow-x: auto;
-    justify-content: center; /* Center the panes and distribute remaining space */
-    padding: 0 2rem; /* Add padding on outer sides */
+    justify-content: flex-start; /* Align panes to start */
+  }
+
+  /* Instructions panel will be sized by JavaScript to match main-2pane-container */
+  .instructions-panel {
+    margin: 0.2rem auto; /* Center horizontally like main-2pane-container */
+    min-width: 0; /* Allow natural sizing */
   }
 
   #left-pane {
@@ -852,13 +965,24 @@ button:disabled:hover {
 
 /* Tablet Layout */
 @media (min-width: 768px) and (max-width: 1199px) {
+  .main-content {
+    padding: 0 1rem; /* Outer padding for page layout */
+  }
+
+  /* Main-2pane-container defines the exact content width */
   #main-2pane-container {
     flex-direction: column;
     gap: 1.5rem;
-    max-width: none; /* Remove width constraint for wide tables */
-    margin: 1.5rem auto;
+    width: fit-content; /* Size based on content */
+    margin: 1.5rem auto; /* Center horizontally */
+    padding: 0; /* No padding - pure content width */
     overflow-x: auto; /* Allow horizontal scrolling for wide content */
-    padding: 0 1rem;
+  }
+
+  /* Instructions panel will be sized by JavaScript to match main-2pane-container */
+  .instructions-panel {
+    margin: 0.2rem auto; /* Center horizontally like main-2pane-container */
+    min-width: 0; /* Allow natural sizing */
   }
 
   #left-pane,
@@ -929,32 +1053,42 @@ button:disabled:hover {
 /* Mobile Layout */
 @media (max-width: 767px) {
   .main-content {
-    padding: 0 0.5rem;
+    padding: 0 0.5rem; /* Outer padding for page layout */
   }
 
-  #instructions-bar {
-    margin: 1rem auto;
+  /* Main-2pane-container defines the exact content width */
+  #main-2pane-container {
+    order: 1; /* Main content second */
+    flex-direction: column;
+    gap: 1rem;
+    width: fit-content; /* Size based on content */
+    margin: 1rem auto; /* Center horizontally */
+    padding: 0; /* No padding - pure content width */
+    overflow-x: auto; /* Allow horizontal scrolling for wide tables */
+  }
+
+  /* Instructions panel will be sized by JavaScript to match main-2pane-container */
+  .instructions-panel {
+    order: 0; /* Instructions panel first */
+    margin: 0.2rem auto; /* Center horizontally like main-2pane-container */
+    min-width: 0; /* Allow natural sizing */
+    box-sizing: border-box;
+  }
+
+  .instructions-header {
     padding: 0.75rem 1rem;
   }
 
-  .instructions-label {
+  .instructions-header h3 {
     font-size: 1.1em;
   }
 
-  .arrow-icon {
-    right: 1rem;
-  }
-
-  #instructions-content {
+  .instructions-content {
     padding: 1rem 1.5rem;
   }
 
-  #main-2pane-container {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 0 0.5rem;
-    margin: 1rem auto;
-    overflow-x: auto; /* Allow horizontal scrolling for wide tables */
+  .instructions-list {
+    font-size: 0.93em;
   }
 
   #left-pane,
@@ -968,31 +1102,49 @@ button:disabled:hover {
   .matrices-section,
   #corpus-selection,
   #corpus-info {
-    padding: 1rem;
+    padding: 0.5rem;
   }
 
-  /* Section titles responsive */
-  .sim-section-title,
-  .viterbi-section-title {
-    font-size: 1.15em;
-    text-align: center;
+  /* Keep matrices tabbed on mobile */
+  .matrices-headers {
+    gap: 0.5rem;
+    flex-wrap: wrap; /* Allow wrapping on very small screens */
   }
 
-  /* Info icon responsive positioning */
+  .matrix-title {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9em;
+    min-width: 120px; /* Smaller minimum width for mobile */
+    flex: 1; /* Allow equal distribution on mobile */
+  }
+
+  .matrix-content-area {
+    min-height: 0; /* Remove min-height constraint on mobile */
+  }
+
+  .matrix-table-display > .sim-section-title {
+    display: none; /* Keep section titles hidden */
+  }
+
+  .matrix-table-display table {
+    margin: 0; /* Remove table margins on mobile */
+  }
+
+  /* Ultra-compact info icon */
   .info-icon {
-    width: 20px;
-    height: 20px;
-    min-width: 20px;
-    min-height: 20px;
-    font-size: 0.7rem;
-    margin-left: 0.35rem;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    font-size: 0.65rem;
+    margin-left: 0.25rem;
   }
 
   /* Responsive sentence headers */
   .sim-sentence-header {
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.1rem;
     text-align: center;
   }
 
@@ -1005,7 +1157,7 @@ button:disabled:hover {
 
   #fldiv .sim-sentence-header .info-icon {
     margin-left: 0;
-    margin-top: 0.25rem;
+    margin-top: 0;
   }
 
   .viterbi-controls,
@@ -1033,7 +1185,7 @@ button:disabled:hover {
   .viterbi-table-container {
     overflow-x: auto;
     width: 100%;
-    margin: 0.75rem 0;
+    margin: 0.15rem 0;
   }
 
   .viterbi-section,
@@ -1110,43 +1262,72 @@ button:disabled:hover {
 /* Very small screens */
 @media (max-width: 480px) {
   .main-content {
-    padding: 0 0.25rem;
+    padding: 0 0.25rem; /* Outer padding for page layout */
   }
 
-  #instructions-bar {
-    margin: 0.75rem auto;
+  /* Main-2pane-container defines the exact content width */
+  #main-2pane-container {
+    order: 1; /* Main content second */
+    width: fit-content; /* Size based on content */
+    margin: 0.75rem auto; /* Center horizontally */
+    padding: 0; /* No padding - pure content width */
+  }
+
+  /* Instructions panel will be sized by JavaScript to match main-2pane-container */
+  .instructions-panel {
+    order: 0; /* Instructions panel first */
+    margin: 0.2rem auto; /* Center horizontally like main-2pane-container */
+    min-width: 0; /* Allow natural sizing */
+  }
+
+  .instructions-header {
     padding: 0.5rem 0.75rem;
   }
 
-  .instructions-label {
+  .instructions-header h3 {
     font-size: 1em;
   }
 
-  .arrow-icon {
-    right: 0.75rem;
-    font-size: 1em;
-  }
-
-  #instructions-content {
+  .instructions-content {
     padding: 0.75rem 1rem;
-  }
-
-  #main-2pane-container {
-    padding: 0 0.25rem;
-    margin: 0.75rem auto;
   }
 
   .sim-section-title,
   .viterbi-section-title {
     font-size: 1em;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.2rem;
   }
 
   .viterbi-section,
   .matrices-section,
   #corpus-selection,
   #corpus-info {
-    padding: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  /* Keep matrices tabbed even on very small screens */
+  .matrices-headers {
+    gap: 0.25rem;
+    flex-wrap: wrap; /* Allow wrapping on very small screens */
+  }
+
+  .matrix-title {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9em;
+    min-width: 100px; /* Even smaller minimum width for very small screens */
+    flex: 1; /* Allow equal distribution */
+  }
+
+  .matrix-content-area {
+    min-height: 0; /* Remove min-height constraint on very small screens */
+  }
+
+  .matrix-table-display > .sim-section-title {
+    display: none; /* Keep section titles hidden */
+  }
+
+  .matrix-table-display table {
+    margin: 0; /* Remove table margins on very small screens */
   }
 
   /* Ultra-compact info icon */
@@ -1161,7 +1342,7 @@ button:disabled:hover {
 
   /* Ultra-compact sentence headers */
   .sim-sentence-header {
-    gap: 0.25rem;
+    gap: 0.1rem;
   }
 
   /* Ultra-compact tables */
@@ -1186,6 +1367,7 @@ button:disabled:hover {
     font-size: 0.7em;
   }
 
+  /* Responsive input fields */
   table input[type="text"],
   input.viterbi-input {
     max-width: 50px;
@@ -1351,6 +1533,137 @@ button:disabled:hover {
 
 #viterbi-feedback .pos-tags-table {
   margin: 1rem auto 0 auto; /* Center the table */
+}
+
+/* Combined Corpus Section */
+#corpus-combined-section {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+#corpus-combined-section #corpus-selection {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+#corpus-combined-section #corpus-info {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0.5rem 1rem;
+  margin: 0;
+}
+
+/* Matrices Tabbed Interface - Titles in One Row */
+.matrices-headers {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: center; /* Center the tab headers */
+}
+
+.matrix-title {
+  flex: 0 0 auto; /* Don't grow or shrink, size based on content */
+  padding: 1rem 1.5rem;
+  background: var(--color-neutral-100);
+  border: 2px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--color-neutral-700);
+  transition: all 0.2s ease;
+  font-size: 1.1em;
+  text-align: center;
+  user-select: none;
+  min-width: 150px; /* Ensure consistent minimum width */
+}
+
+.matrix-title:hover {
+  background: var(--color-neutral-200);
+  border-color: var(--color-primary-light);
+  transform: translateY(-1px);
+}
+
+.matrix-title.active {
+  background: var(--color-primary-light);
+  color: white;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.matrix-title i.fas:first-child {
+  margin-right: 0.5rem;
+}
+
+/* Matrix content area - single table display */
+.matrix-content-area {
+  position: relative;
+  width: fit-content; /* Size to fit the content */
+  margin: 0 auto; /* Center horizontally */
+  min-height: 0; /* Remove min-height constraint */
+}
+
+.matrix-table-display {
+  display: none; /* Hide by default */
+  width: fit-content; /* Size to fit the table */
+  margin: 0; /* Remove all margins */
+  padding: 0; /* Remove all padding */
+  background: transparent; /* Remove background */
+  border: none; /* Remove border */
+  border-radius: 0; /* Remove border radius */
+  overflow: visible; /* Allow content to be fully visible */
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.matrix-table-display.active {
+  display: block; /* Show only the active matrix */
+}
+
+.matrix-table-display > .sim-section-title {
+  display: none; /* Hide section titles since tab headers provide the labels */
+}
+
+.matrix-table-display table {
+  margin: 0; /* Remove all table margins */
+  border: none !important;
+  box-shadow: none !important;
+  width: auto; /* Let table size naturally */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Override individual corpus section styles when inside combined section */
+#corpus-combined-section #corpus-selection,
+#corpus-combined-section #corpus-info {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 /*# sourceMappingURL=main.css.map */
