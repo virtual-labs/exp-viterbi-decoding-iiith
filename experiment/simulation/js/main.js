@@ -101,26 +101,20 @@ function closeTestSentenceModal(event) {
 function setupInstructionsPanel() {
   const tab = document.getElementById("instructionsTab");
   const instructionsContent = document.getElementById("instructionsContent");
-  const toggleIcon = tab ? tab.querySelector(".toggle-icon") : null;
 
   if (tab && instructionsContent) {
     // Collapsed by default
     instructionsContent.classList.add("collapsed");
+    tab.classList.add("collapsed");
 
     tab.addEventListener("click", () => {
       const isCollapsed = instructionsContent.classList.contains("collapsed");
       if (isCollapsed) {
         instructionsContent.classList.remove("collapsed");
-        if (toggleIcon) {
-          toggleIcon.classList.remove("fa-chevron-down");
-          toggleIcon.classList.add("fa-chevron-up");
-        }
+        tab.classList.remove("collapsed");
       } else {
         instructionsContent.classList.add("collapsed");
-        if (toggleIcon) {
-          toggleIcon.classList.remove("fa-chevron-up");
-          toggleIcon.classList.add("fa-chevron-down");
-        }
+        tab.classList.add("collapsed");
       }
     });
   }
@@ -502,6 +496,9 @@ function setupViterbiControls(corpus, userInput) {
     $(document)
       .off("click", "#show-answer-btn")
       .on("click", "#show-answer-btn", function () {
+        // Hide hints when showing answer
+        $("#sim-hint").hide().empty();
+
         showViterbiAnswer(corpus, userInput);
       });
   } else {
@@ -512,6 +509,9 @@ function setupViterbiControls(corpus, userInput) {
     $(document)
       .off("click", "#show-hint-btn")
       .on("click", "#show-hint-btn", function () {
+        // Hide answer table when showing hints
+        $("#viterbi-feedback").hide().empty();
+
         let allHints = viterbiHints
           .map((h) => '<div class="sim-hint" tabindex="0">' + h + "</div>")
           .join("");
