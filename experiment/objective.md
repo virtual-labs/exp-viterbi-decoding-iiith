@@ -1,21 +1,21 @@
-By the end of this experiment, participants will be able to:
+After completing this experiment, students will be able to:
 
-1. **Understand the Viterbi algorithm** as a dynamic programming solution for finding the most likely sequence of hidden states in Hidden Markov Models.
+1. **Understand Viterbi Algorithm Mechanics**: Comprehend the step-by-step process of the Viterbi algorithm as a dynamic programming solution for finding the most probable sequence of hidden states in Hidden Markov Models with 90% accuracy.
 
-2. **Comprehend the mathematical foundations** of Viterbi decoding, including the recursive computation of maximum probabilities and backtracking for optimal path recovery.
+2. **Apply Mathematical Foundations**: Correctly compute emission probabilities P(word|tag) and transition probabilities P(tag_j|tag_i) from training corpora, and use these matrices to fill Viterbi tables systematically for test sentences.
 
-3. **Interpret emission and transition matrices** derived from training corpora and understand their role in statistical POS tagging.
+3. **Implement Dynamic Programming Logic**: Demonstrate proficiency in the recursive computation of maximum probabilities at each step, maintaining backpointers for optimal path recovery, and understanding the O(N×T²) time complexity advantage over brute force O(T^N) approaches.
 
-4. **Apply the Viterbi algorithm step-by-step** to decode POS tag sequences for test sentences using pre-computed probability matrices.
+4. **Analyze POS Tagging Process**: Interpret how the algorithm balances emission probabilities (word-tag likelihood) with transition probabilities (tag sequence likelihood) to achieve optimal linguistic accuracy in part-of-speech assignment.
 
-5. **Fill Viterbi tables systematically** by computing maximum probabilities for each word-tag combination and maintaining backpointers for path reconstruction.
+5. **Practice Interactive Problem-Solving**: Develop hands-on skills using the simulation to decode POS tag sequences across different corpus examples, comparing how training data characteristics affect probability distributions and decoding outcomes.
 
-6. **Analyze the decoding process** by understanding how the algorithm balances emission probabilities (word-tag likelihood) with transition probabilities (tag sequence likelihood).
+6. **Evaluate Algorithm Efficiency**: Understand the computational advantages of dynamic programming in sequence labeling tasks and recognize applications beyond POS tagging including speech recognition, bioinformatics, and named entity recognition.
 
-7. **Compare different corpus examples** to observe how training data characteristics affect the resulting probability distributions and decoding outcomes.
+#### Learning Focus
 
-8. **Evaluate the efficiency** of dynamic programming in solving the exponential search space problem of finding optimal tag sequences.
-
-9. **Understand practical applications** of the Viterbi algorithm beyond POS tagging, including speech recognition, bioinformatics, and other sequence labeling tasks.
-
-10. **Practice interactive problem-solving** through hands-on simulation exercises that reinforce theoretical understanding with practical implementation.
+- Master the Viterbi decoding process through interactive matrix filling
+- Understand probability computation from emission and transition matrices
+- Apply dynamic programming principles to sequence labeling problems
+- Analyze the relationship between training data and model performance
+- Compare different corpus examples and their impact on tagging accuracy
