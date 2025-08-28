@@ -1,1 +1,1679 @@
-/* You CSS goes in here */
+/* main.css: Modern responsive design for Viterbi Decoding experiment */
+:root {
+  --color-primary: #4361ee;
+  --color-primary-light: #4895ef;
+  --color-primary-dark: #3a0ca3;
+  --color-secondary: #4cc9f0;
+  --color-secondary-light: #72efdd;
+  --color-secondary-dark: #3f8efc;
+  --color-accent: #f72585;
+  --color-accent-light: #ff8fab;
+  --color-accent-dark: #b5179e;
+  --color-success: #4caf50;
+  --color-error: #f44336;
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --shadow-md: 0 4px 6px -1px rgba(67, 97, 238, 0.08),
+    0 2px 4px -1px rgba(67, 97, 238, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(67, 97, 238, 0.1),
+    0 4px 6px -2px rgba(67, 97, 238, 0.05);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-50);
+  font-size: 0.97em;
+  min-height: 100vh;
+  overflow-x: visible;
+}
+
+/* Ensure consistent font inheritance across all text elements */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+div,
+span,
+label,
+input,
+select,
+textarea,
+button,
+th,
+td,
+li,
+ul,
+ol,
+.sim-section-title,
+.sim-sentence-text,
+.sim-sentence-header,
+.instructions-list,
+.instructions-header,
+.viterbi-table,
+.pos-tags-table,
+.emission-matrix-table,
+.transition-matrix-table,
+.feedback-message,
+.sim-feedback,
+.sim-hint,
+.btn,
+.sim-button,
+.matrix-title,
+.matrix-content-area {
+  font-family: inherit !important;
+}
+
+.container {
+  max-width: 100vw; /* Use full viewport width */
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  overflow-x: auto; /* Allow horizontal scrolling when tables are very wide */
+}
+
+.main-content {
+  width: 100%;
+  max-width: 100vw; /* Use full viewport width */
+  margin: 0 auto;
+  padding: 0; /* Remove base padding - let children handle their own spacing */
+  box-sizing: border-box;
+  min-width: 0; /* Allow shrinking */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center children horizontally */
+}
+
+/* Ensure proper order for all screens */
+.instructions-panel {
+  order: 0; /* Instructions panel first */
+}
+
+#main-2pane-container {
+  order: 1; /* Main content second */
+  padding: 0; /* No padding - pure content width */
+  margin: 0; /* No margin - pure content width */
+}
+
+/* Instructions Panel */
+.instructions-panel {
+  order: 0; /* Instructions panel first */
+  width: auto; /* Will match main-2pane-container width automatically */
+  max-width: none;
+  margin: 0.1rem auto; /* Further reduced margin for minimal gap */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  padding: 0;
+  border-radius: 0;
+}
+
+.instructions-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(90deg, #6ef2e6 0%, #4895ef 100%);
+  border-bottom: 1px solid var(--color-neutral-200);
+  cursor: pointer;
+  transition: background 0.2s;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  gap: 0.5rem;
+}
+
+.instructions-header .arrow-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+  color: var(--color-primary-dark);
+}
+
+.instructions-header:not(.collapsed) .arrow-icon {
+  transform: rotate(180deg);
+}
+
+.instructions-header:hover {
+  background: linear-gradient(90deg, #72efdd 0%, #4895ef 100%);
+}
+
+.instructions-header h3 {
+  margin: 0;
+  color: var(--color-primary-dark);
+  font-weight: 700;
+  font-size: 1.15em;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary-dark);
+  cursor: pointer;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.toggle-btn:hover {
+  background-color: rgba(67, 97, 238, 0.1);
+  transform: translateY(-1px);
+}
+
+.instructions-content {
+  padding: 0.7rem 0.5rem;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--color-neutral-100);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  box-shadow: 0 2px 8px rgba(67, 97, 238, 0.04);
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  opacity: 1;
+  max-height: 400px;
+}
+
+.instructions-content.collapsed {
+  display: block;
+  opacity: 0;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.instructions-list {
+  list-style: disc inside;
+  margin: 0.2em 0 0.2em 1em;
+  padding: 0;
+  font-size: 1em;
+  color: var(--color-neutral-800);
+  line-height: 1.5;
+}
+
+.instructions-list li {
+  margin-bottom: 0.3em;
+}
+
+/* Legacy support for existing HTML structure */
+#instructions-bar {
+  display: none;
+}
+
+#instructions-content {
+  display: none;
+}
+
+/* Main Layout - 2-pane container */
+#main-2pane-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: fit-content; /* Size based on content: left-pane + gap + right-pane */
+  margin: 0 auto; /* Center horizontally */
+  padding: 0; /* No padding - pure content width */
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  min-width: 0;
+}
+
+/* Left pane - corpus selection, test sentence, and matrices */
+#left-pane {
+  flex: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+/* Right pane - Viterbi table */
+#right-pane {
+  flex: none;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Pane Sections */
+#corpus-selection,
+#corpus-info {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.viterbi-section,
+.matrices-section {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  width: auto; /* Let content determine width */
+  min-width: 0;
+  overflow-x: visible;
+  display: flex; /* Use flexbox for centering */
+  flex-direction: column; /* Stack content vertically */
+  align-items: center; /* Center content horizontally */
+}
+
+/* POS Tags Section - matching viterbi-table styling */
+.pos-tags-section {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  margin-top: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pos-tags-section .sim-section-title {
+  color: var(--color-primary-dark);
+  font-size: 1.3em;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-align: center; /* Center the title */
+  align-self: stretch; /* Allow title to take full width */
+}
+
+/* Section Titles */
+.sim-section-title,
+.viterbi-section-title {
+  color: var(--color-primary-dark);
+  font-size: 1.3em;
+  margin: 0 0 0.1rem 0;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-align: center; /* Center section titles */
+  align-self: stretch; /* Allow title to take full width of flex container */
+}
+
+/* Simulation Step Styling */
+.simulation-step {
+  background: #fff;
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-lg);
+  padding: 1.2em;
+  margin-bottom: 1em;
+  max-width: 100%;
+  text-align: center;
+  transition: box-shadow 0.2s;
+  border: 1px solid var(--color-neutral-200);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.simulation-step .step-heading {
+  font-size: 1.19em;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  margin-bottom: 0.1em;
+  margin-top: 0;
+  letter-spacing: 0.01em;
+}
+
+/* Dropdowns */
+select,
+.viterbi-dropdown {
+  width: 100%;
+  background: var(--color-neutral-100);
+  border: 2px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  color: var(--color-neutral-800);
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5rem 1.5rem;
+  padding-right: 2.5rem;
+}
+
+select:hover,
+.viterbi-dropdown:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+select:focus,
+.viterbi-dropdown:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+  outline: none;
+}
+
+/* Tables */
+table,
+.viterbi-table,
+.emission-matrix-table,
+.transition-matrix-table {
+  width: auto; /* Natural width based on content */
+  border-collapse: collapse;
+  margin: 1rem auto; /* Center tables horizontally */
+  background: #fff;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  table-layout: auto;
+}
+
+.viterbi-table-container {
+  margin: 0.2rem 0;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: auto; /* Size based on table content */
+  max-width: 100%;
+  display: flex; /* Use flexbox for centering */
+  justify-content: center; /* Center the table horizontally */
+}
+
+table th,
+.viterbi-table th,
+.emission-matrix-table th,
+.transition-matrix-table th {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+  padding: 1rem 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid var(--color-neutral-300);
+  font-size: 0.95em;
+  letter-spacing: 0.01em;
+}
+
+table td,
+.viterbi-table td,
+.emission-matrix-table td,
+.transition-matrix-table td {
+  padding: 0.75rem;
+  text-align: center;
+  border: 1px solid var(--color-neutral-300);
+  background: #fff;
+  font-size: 0.9em;
+  color: var(--color-neutral-800);
+}
+
+table tr:nth-child(even) td,
+.viterbi-table tr:nth-child(even) td {
+  background: var(--color-neutral-50);
+}
+
+table tr:hover td,
+.viterbi-table tr:hover td {
+  background: var(--color-neutral-100);
+}
+
+/* POS tags table styling */
+.pos-tags-table {
+  width: auto;
+  border-collapse: collapse;
+  margin: 1rem auto 0 auto;
+  background: #fff;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  table-layout: auto;
+}
+
+.pos-tags-table th {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+  padding: 1rem 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid var(--color-neutral-300);
+  font-size: 0.95em;
+  letter-spacing: 0.01em;
+}
+
+.pos-tags-table td {
+  padding: 0.75rem;
+  text-align: center;
+  border: 1px solid var(--color-neutral-300);
+  background: #fff;
+  font-size: 0.9em;
+  color: var(--color-neutral-800);
+  font-weight: 500;
+}
+
+.pos-tags-table .sim-pos-tag {
+  background: rgba(67, 97, 238, 0.1);
+  color: var(--color-primary-dark);
+  font-weight: 600;
+  padding: 0.75rem;
+  border: 1px solid var(--color-primary-light);
+}
+
+/* Input fields in tables */
+table input[type="text"],
+.viterbi-table input[type="text"],
+input.viterbi-input {
+  width: 100%;
+  max-width: 80px;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-size: 0.9em;
+  background: #fff;
+  color: var(--color-neutral-800);
+  transition: all 0.2s ease;
+}
+
+table input[type="text"]:focus,
+.viterbi-table input[type="text"]:focus,
+input.viterbi-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+  outline: none;
+}
+
+table input[type="text"].correct,
+.viterbi-table input[type="text"].correct,
+input.viterbi-input.correct {
+  border-color: var(--color-success);
+  background: rgba(76, 175, 80, 0.1);
+}
+
+table input[type="text"].incorrect,
+.viterbi-table input[type="text"].incorrect,
+input.viterbi-input.incorrect {
+  border-color: var(--color-error);
+  background: rgba(244, 67, 54, 0.1);
+}
+
+/* Buttons */
+.viterbi-controls,
+.button-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  justify-content: center;
+}
+
+.btn,
+.sim-button,
+button {
+  border: none;
+  border-radius: 2.2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  margin: 0.2rem;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  text-decoration: none;
+  min-width: 120px;
+  justify-content: center;
+}
+
+/* Primary buttons (Check button) */
+.btn-primary,
+.sim-button,
+#viterbi-check-btn {
+  background: linear-gradient(
+    90deg,
+    var(--color-primary) 60%,
+    var(--color-secondary) 100%
+  );
+  color: #fff;
+}
+
+.btn-primary:hover,
+.sim-button:hover:not(:disabled),
+#viterbi-check-btn:hover:not(:disabled) {
+  background: linear-gradient(
+    90deg,
+    var(--color-primary-dark) 60%,
+    var(--color-accent) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Secondary buttons (Show Answer, Show Hint, Reset) */
+.btn-secondary,
+#show-answer-btn,
+#show-hint-btn,
+#restart-btn {
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary) 60%,
+    var(--color-accent-light) 100%
+  );
+  color: #fff;
+}
+
+.btn-secondary:hover,
+#show-answer-btn:hover:not(:disabled),
+#show-hint-btn:hover:not(:disabled),
+#restart-btn:hover:not(:disabled) {
+  background: linear-gradient(
+    90deg,
+    var(--color-secondary-dark) 60%,
+    var(--color-accent) 100%
+  );
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Disabled buttons */
+.btn:disabled,
+.sim-button:disabled,
+button:disabled {
+  background: var(--color-neutral-400) !important;
+  color: var(--color-neutral-200) !important;
+  cursor: not-allowed !important;
+  opacity: 0.6 !important;
+  transform: none !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.btn:disabled:hover,
+.sim-button:disabled:hover,
+button:disabled:hover {
+  background: var(--color-neutral-400) !important;
+  box-shadow: var(--shadow-md) !important;
+  transform: none !important;
+}
+
+.viterbi-controls {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-neutral-200);
+  width: 100%; /* Full width to contain buttons and feedback */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Feedback and Messages */
+.feedback-message,
+.sim-feedback {
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: var(--radius-lg);
+  border: 1px solid;
+  font-weight: 500;
+  text-align: center;
+  display: none; /* Hidden by default */
+}
+
+.feedback-success {
+  background: rgba(76, 175, 80, 0.1);
+  border-left-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.feedback-error {
+  background: rgba(244, 67, 54, 0.1);
+  border-left-color: var(--color-error);
+  color: var(--color-error);
+}
+
+/* Hints */
+.sim-hint {
+  background: rgba(67, 97, 238, 0.1);
+  border-left: 4px solid var(--color-primary);
+  padding: 1rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: var(--radius-md);
+  font-size: 1em;
+  display: none;
+  color: var(--color-primary-dark);
+}
+
+/* Sentence Display */
+.sim-sentence {
+  font-size: 1.15em;
+  font-weight: 500;
+  color: var(--color-neutral-800);
+  line-height: 1.6;
+  text-align: center;
+  padding: 1rem 1.5rem;
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-neutral-200);
+}
+
+/* Test sentence header with inline title and info icon */
+.sim-sentence-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Left pane layout - title on separate line */
+#full-sentence .sim-sentence-header {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+/* Right pane layout - title inline with sentence and icon */
+#fldiv .sim-sentence-header {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sim-sentence-header .sim-section-title {
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+  color: var(--color-neutral-800);
+}
+
+/* In right pane, remove bottom margin from title */
+#fldiv .sim-sentence-header .sim-section-title {
+  margin-bottom: 0;
+}
+
+.sim-sentence-text {
+  font-weight: normal;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Info icon styling identical to Markov experiment */
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
+  border-radius: 50%;
+  background-color: var(--color-primary-dark);
+  color: white;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+  cursor: help;
+  transition: background-color 0.2s ease;
+  vertical-align: middle;
+  border: none;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.info-icon:hover {
+  background-color: var(--color-primary);
+}
+
+.info-icon:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Modal overlay and content */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-header {
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--color-neutral-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: var(--color-neutral-800);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
+  flex-shrink: 0;
+  aspect-ratio: 1;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.modal-close i {
+  display: block;
+  font-size: inherit;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+}
+
+.modal-close:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.modal-body {
+  padding: 1rem 1.5rem;
+  color: var(--color-neutral-700);
+  line-height: 1.6;
+}
+
+.modal-body ul {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.modal-body li {
+  margin-bottom: 0.5rem;
+}
+
+.modal-body strong {
+  color: var(--color-neutral-800);
+  font-weight: 600;
+}
+
+.modal-body em {
+  color: var(--color-primary);
+  font-style: italic;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--color-neutral-200);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Responsive modal */
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .modal-content {
+    max-height: 90vh;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .sim-sentence-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .info-icon {
+    align-self: flex-end;
+    margin-left: 0;
+  }
+}
+
+/* Desktop Layout - when screen is wide enough */
+@media (min-width: 1200px) {
+  .main-content {
+    padding: 0 2rem; /* Outer padding for page layout */
+  }
+
+  /* Main-2pane-container defines the exact content width: left-pane + gap + right-pane */
+  #main-2pane-container {
+    flex-direction: row;
+    gap: 2rem; /* Gap between panes */
+    width: fit-content; /* Size based on content: left-pane + gap + right-pane */
+    margin: 2rem auto; /* Center horizontally */
+    padding: 0; /* No padding - pure content width */
+    overflow-x: auto;
+    justify-content: flex-start; /* Align panes to start */
+  }
+
+  /* Instructions panel will be sized by JavaScript to match main-2pane-container */
+  .instructions-panel {
+    margin: 0.2rem auto; /* Center horizontally like main-2pane-container */
+    min-width: 0; /* Allow natural sizing */
+  }
+
+  #left-pane {
+    flex: 0 0 auto; /* Size based on content */
+    width: auto; /* Let content determine width */
+    min-width: 0; /* Allow shrinking if needed */
+    max-width: none; /* No artificial max width */
+  }
+
+  #right-pane {
+    flex: 0 0 auto; /* Size based on content */
+    width: auto; /* Let content determine width */
+    min-width: 0; /* Allow shrinking if needed */
+    max-width: none; /* No artificial max width */
+  }
+
+  /* Allow content-based sizing for sections */
+  .viterbi-table-container {
+    overflow-x: auto;
+    width: auto; /* Let content determine width */
+    max-width: 100%;
+  }
+
+  .viterbi-section,
+  .matrices-section {
+    overflow-x: auto;
+    width: auto; /* Let content determine section width */
+  }
+
+  /* Ensure matrices size naturally */
+  .matrices-section table {
+    width: auto; /* Natural table width */
+    max-width: none; /* Remove max width constraint */
+  }
+
+  /* Keep controls full width and properly structured */
+  .viterbi-section .viterbi-controls {
+    width: 100%; /* Full width in the section */
+    max-width: none; /* Remove max width constraint */
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+/* Tablet Layout */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .main-content {
+    padding: 0 1rem; /* Outer padding for page layout */
+  }
+
+  /* Main-2pane-container defines the exact content width */
+  #main-2pane-container {
+    flex-direction: column;
+    gap: 1.5rem;
+    width: fit-content; /* Size based on content */
+    margin: 1.5rem auto; /* Center horizontally */
+    padding: 0; /* No padding - pure content width */
+    overflow-x: auto; /* Allow horizontal scrolling for wide content */
+  }
+
+  /* Instructions panel will be sized by JavaScript to match main-2pane-container */
+  .instructions-panel {
+    margin: 0.2rem auto; /* Center horizontally like main-2pane-container */
+    min-width: 0; /* Allow natural sizing */
+  }
+
+  #left-pane,
+  #right-pane {
+    width: 100%;
+    max-width: none; /* Allow full table width */
+    min-width: 0;
+  }
+
+  .viterbi-section,
+  .matrices-section {
+    padding: 1.25rem;
+  }
+
+  /* Tablet-specific button layout */
+  .viterbi-buttons-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .btn,
+  .sim-button {
+    flex: 1;
+    min-width: 140px;
+    max-width: 200px;
+  }
+
+  /* Responsive info icon for tablets */
+  .info-icon {
+    width: 21px;
+    height: 21px;
+    min-width: 21px;
+    min-height: 21px;
+    font-size: 0.72rem;
+  }
+
+  /* Table responsive adjustments for tablets */
+  table,
+  .viterbi-table,
+  .pos-tags-table {
+    font-size: 0.9em;
+  }
+
+  table th,
+  .viterbi-table th,
+  .pos-tags-table th {
+    padding: 0.8rem 0.6rem;
+    font-size: 0.9em;
+  }
+
+  table td,
+  .viterbi-table td,
+  .pos-tags-table td {
+    padding: 0.65rem 0.5rem;
+    font-size: 0.85em;
+  }
+
+  table input[type="text"],
+  .viterbi-table input[type="text"],
+  input.viterbi-input {
+    max-width: 70px;
+    font-size: 0.85em;
+  }
+}
+
+/* Mobile Layout */
+@media (max-width: 767px) {
+  .main-content {
+    padding: 0 0.5rem; /* Outer padding for page layout */
+  }
+
+  /* Main-2pane-container defines the exact content width */
+  #main-2pane-container {
+    order: 1; /* Main content second */
+    flex-direction: column;
+    gap: 1rem;
+    width: fit-content; /* Size based on content */
+    margin: 1rem auto; /* Center horizontally */
+    padding: 0; /* No padding - pure content width */
+    overflow-x: auto; /* Allow horizontal scrolling for wide tables */
+  }
+
+  /* Instructions panel will be sized by JavaScript to match main-2pane-container */
+  .instructions-panel {
+    order: 0; /* Instructions panel first */
+    margin: 0.2rem auto; /* Center horizontally like main-2pane-container */
+    min-width: 0; /* Allow natural sizing */
+    box-sizing: border-box;
+  }
+
+  .instructions-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .instructions-header h3 {
+    font-size: 1.1em;
+  }
+
+  .instructions-content {
+    padding: 1rem 1.5rem;
+  }
+
+  .instructions-list {
+    font-size: 0.93em;
+  }
+
+  #left-pane,
+  #right-pane {
+    width: 100%;
+    max-width: none; /* Allow tables to expand naturally */
+    min-width: 0; /* Allow shrinking */
+  }
+
+  .viterbi-section,
+  .matrices-section,
+  #corpus-selection,
+  #corpus-info {
+    padding: 0.5rem;
+  }
+
+  /* Keep matrices tabbed on mobile */
+  .matrices-headers {
+    gap: 0.5rem;
+    flex-wrap: wrap; /* Allow wrapping on very small screens */
+  }
+
+  .matrix-title {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9em;
+    min-width: 120px; /* Smaller minimum width for mobile */
+    flex: 1; /* Allow equal distribution on mobile */
+  }
+
+  .matrix-content-area {
+    min-height: 0; /* Remove min-height constraint on mobile */
+  }
+
+  .matrix-table-display > .sim-section-title {
+    display: none; /* Keep section titles hidden */
+  }
+
+  .matrix-table-display table {
+    margin: 0; /* Remove table margins on mobile */
+  }
+
+  /* Ultra-compact info icon */
+  .info-icon {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    font-size: 0.65rem;
+    margin-left: 0.25rem;
+  }
+
+  /* Responsive sentence headers */
+  .sim-sentence-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    text-align: center;
+  }
+
+  /* Center info icon below title on mobile */
+  #fldiv .sim-sentence-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  #fldiv .sim-sentence-header .info-icon {
+    margin-left: 0;
+    margin-top: 0;
+  }
+
+  .viterbi-controls,
+  .button-controls {
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+
+  .viterbi-buttons-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .btn,
+  .sim-button {
+    width: 100%;
+    margin: 0;
+    min-width: auto;
+    font-size: 0.95rem;
+    padding: 0.65rem 1rem;
+  }
+
+  /* Make tables scroll horizontally on mobile if needed */
+  .viterbi-table-container {
+    overflow-x: auto;
+    width: 100%;
+    margin: 0.15rem 0;
+  }
+
+  .viterbi-section,
+  .matrices-section {
+    overflow-x: auto; /* Allow horizontal scrolling on mobile */
+    padding: 0.75rem;
+  }
+
+  /* Responsive table sizing */
+  table,
+  .viterbi-table,
+  .pos-tags-table {
+    min-width: 480px; /* Reduced min-width for better mobile fit */
+    font-size: 0.85em;
+  }
+
+  table th,
+  .viterbi-table th,
+  .pos-tags-table th {
+    padding: 0.6rem 0.4rem;
+    font-size: 0.8em;
+  }
+
+  table td,
+  .viterbi-table td,
+  .pos-tags-table td {
+    padding: 0.5rem 0.3rem;
+    font-size: 0.8em;
+  }
+
+  /* Responsive input fields */
+  table input[type="text"],
+  .viterbi-table input[type="text"],
+  input.viterbi-input {
+    max-width: 65px;
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8em;
+  }
+
+  /* Responsive feedback and hints */
+  .feedback-message,
+  #viterbi-feedback {
+    padding: 0.75rem 1rem;
+    font-size: 0.9em;
+  }
+
+  #sim-hint .sim-hint {
+    padding: 0.75rem 1rem;
+    font-size: 0.85em;
+  }
+
+  /* Modal responsive adjustments */
+  .modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .modal-content {
+    max-height: 85vh;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .modal-body {
+    font-size: 0.9em;
+    line-height: 1.5;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .main-content {
+    padding: 0 0.25rem; /* Outer padding for page layout */
+  }
+
+  /* Main-2pane-container defines the exact content width */
+  #main-2pane-container {
+    order: 1; /* Main content second */
+    width: fit-content; /* Size based on content */
+    margin: 0.75rem auto; /* Center horizontally */
+    padding: 0; /* No padding - pure content width */
+  }
+
+  /* Instructions panel will be sized by JavaScript to match main-2pane-container */
+  .instructions-panel {
+    order: 0; /* Instructions panel first */
+    margin: 0.2rem auto; /* Center horizontally like main-2pane-container */
+    min-width: 0; /* Allow natural sizing */
+  }
+
+  .instructions-header {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .instructions-header h3 {
+    font-size: 1em;
+  }
+
+  .instructions-content {
+    padding: 0.75rem 1rem;
+  }
+
+  .sim-section-title,
+  .viterbi-section-title {
+    font-size: 1em;
+    margin-bottom: 0.2rem;
+  }
+
+  .viterbi-section,
+  .matrices-section,
+  #corpus-selection,
+  #corpus-info {
+    padding: 0.5rem;
+  }
+
+  /* Keep matrices tabbed even on very small screens */
+  .matrices-headers {
+    gap: 0.25rem;
+    flex-wrap: wrap; /* Allow wrapping on very small screens */
+  }
+
+  .matrix-title {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9em;
+    min-width: 100px; /* Even smaller minimum width for very small screens */
+    flex: 1; /* Allow equal distribution */
+  }
+
+  .matrix-content-area {
+    min-height: 0; /* Remove min-height constraint on very small screens */
+  }
+
+  .matrix-table-display > .sim-section-title {
+    display: none; /* Keep section titles hidden */
+  }
+
+  .matrix-table-display table {
+    margin: 0; /* Remove table margins on very small screens */
+  }
+
+  /* Ultra-compact info icon */
+  .info-icon {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    font-size: 0.65rem;
+    margin-left: 0.25rem;
+  }
+
+  /* Ultra-compact sentence headers */
+  .sim-sentence-header {
+    gap: 0.1rem;
+  }
+
+  /* Ultra-compact tables */
+  table,
+  .viterbi-table,
+  .pos-tags-table {
+    min-width: 320px; /* Further reduced for very small screens */
+    font-size: 0.75em;
+  }
+
+  table th,
+  .viterbi-table th,
+  .pos-tags-table th {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.7em;
+  }
+
+  table td,
+  .viterbi-table td,
+  .pos-tags-table td {
+    padding: 0.35rem 0.15rem;
+    font-size: 0.7em;
+  }
+
+  /* Responsive input fields */
+  table input[type="text"],
+  input.viterbi-input {
+    max-width: 50px;
+    padding: 0.25rem 0.3rem;
+    font-size: 0.7em;
+  }
+
+  /* Ultra-compact buttons */
+  .btn,
+  .sim-button {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    min-height: 40px;
+  }
+
+  /* Ultra-compact controls */
+  .viterbi-controls {
+    padding: 0.75rem;
+    margin: 0.75rem 0;
+  }
+
+  .viterbi-buttons-row {
+    gap: 0.4rem;
+  }
+
+  /* Ultra-compact feedback */
+  .feedback-message,
+  #viterbi-feedback {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8em;
+  }
+
+  #sim-hint .sim-hint {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8em;
+  }
+
+  /* Ultra-compact modal */
+  .modal-overlay {
+    padding: 0.25rem;
+  }
+
+  .modal-content {
+    max-height: 90vh;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding: 0.75rem;
+  }
+
+  .modal-body {
+    font-size: 0.85em;
+  }
+
+  .modal-header h3 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Extra responsive breakpoint for medium-small screens */
+@media (min-width: 481px) and (max-width: 640px) {
+  .sim-sentence-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  #fldiv .sim-sentence-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #fldiv .sim-sentence-header .info-icon {
+    margin-left: 0.4rem;
+    margin-top: 0;
+  }
+
+  .viterbi-buttons-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .btn,
+  .sim-button {
+    flex: 1;
+    min-width: 120px;
+    max-width: 180px;
+  }
+}
+
+/* Button layout - all buttons in one row */
+.viterbi-buttons-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Feedback area - full width below buttons */
+#viterbi-feedback {
+  width: 100%;
+  margin: 0;
+  padding: 1rem 1.5rem;
+  box-sizing: border-box;
+}
+
+/* Hint area - full width */
+#sim-hint {
+  width: 100%;
+  margin: 1rem 0 0 0;
+  display: none !important; /* Hidden by default */
+}
+
+#sim-hint.show,
+#sim-hint:not(:empty) {
+  display: block !important;
+}
+
+#sim-hint .sim-hint {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0.5rem 0;
+  padding: 1rem 1.5rem;
+  background: #f6faff;
+  border: 1px solid #e3f2fd;
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  color: var(--color-neutral-700);
+  font-size: 0.95em;
+  line-height: 1.5;
+  box-shadow: 0 2px 4px rgba(67, 97, 238, 0.08);
+  display: block !important;
+}
+
+#sim-hint .sim-hint:first-child {
+  margin-top: 0;
+}
+
+#sim-hint .sim-hint:last-child {
+  margin-bottom: 0;
+}
+
+/* Ensure POS tags section displays properly in feedback area */
+#viterbi-feedback .pos-tags-section {
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content in the section */
+}
+
+#viterbi-feedback .pos-tags-section .sim-section-title {
+  text-align: center; /* Center the title */
+  margin-bottom: 1rem;
+  align-self: stretch; /* Allow title to take full width */
+}
+
+#viterbi-feedback .pos-tags-table {
+  margin: 1rem auto 0 auto; /* Center the table */
+}
+
+/* Combined Corpus Section */
+#corpus-combined-section {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-neutral-200);
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+#corpus-combined-section #corpus-selection {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+#corpus-combined-section #corpus-info {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0.5rem 1rem;
+  margin: 0;
+}
+
+/* Matrices Tabbed Interface - Titles in One Row */
+.matrices-headers {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: center; /* Center the tab headers */
+}
+
+.matrix-title {
+  flex: 0 0 auto; /* Don't grow or shrink, size based on content */
+  padding: 1rem 1.5rem;
+  background: var(--color-neutral-100);
+  border: 2px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--color-neutral-700);
+  transition: all 0.2s ease;
+  font-size: 1.1em;
+  text-align: center;
+  user-select: none;
+  min-width: 150px; /* Ensure consistent minimum width */
+}
+
+.matrix-title:hover {
+  background: var(--color-neutral-200);
+  border-color: var(--color-primary-light);
+  transform: translateY(-1px);
+}
+
+.matrix-title.active {
+  background: var(--color-primary-light);
+  color: white;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.matrix-title i.fas:first-child {
+  margin-right: 0.5rem;
+}
+
+/* Matrix content area - single table display */
+.matrix-content-area {
+  position: relative;
+  width: fit-content; /* Size to fit the content */
+  margin: 0 auto; /* Center horizontally */
+  min-height: 0; /* Remove min-height constraint */
+}
+
+.matrix-table-display {
+  display: none; /* Hide by default */
+  width: fit-content; /* Size to fit the table */
+  margin: 0; /* Remove all margins */
+  padding: 0; /* Remove all padding */
+  background: transparent; /* Remove background */
+  border: none; /* Remove border */
+  border-radius: 0; /* Remove border radius */
+  overflow: visible; /* Allow content to be fully visible */
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.matrix-table-display.active {
+  display: block; /* Show only the active matrix */
+}
+
+.matrix-table-display > .sim-section-title {
+  display: none; /* Hide section titles since tab headers provide the labels */
+}
+
+.matrix-table-display table {
+  margin: 0; /* Remove all table margins */
+  border: none !important;
+  box-shadow: none !important;
+  width: auto; /* Let table size naturally */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Override individual corpus section styles when inside combined section */
+#corpus-combined-section #corpus-selection,
+#corpus-combined-section #corpus-info {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/*# sourceMappingURL=main.css.map */

@@ -1,0 +1,158 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "After completing the Viterbi experiment, you understand that the algorithm's core principle is based on which mathematical concept?",
+      "answers": {
+        "a": "Dynamic programming with optimal substructure",
+        "b": "Gradient descent optimization",
+        "c": "Random walk theory",
+        "d": "Fourier transform analysis"
+      },
+      "explanations": {
+        "a": "Correct! The Viterbi algorithm relies on dynamic programming, where the optimal solution to a problem contains optimal solutions to subproblems, allowing efficient computation of the best tag sequence.",
+        "b": "Incorrect. Gradient descent is used in neural network training, not in the Viterbi algorithm.",
+        "c": "Incorrect. Random walks are stochastic processes, while Viterbi is deterministic optimization.",
+        "d": "Incorrect. Fourier transforms are used in signal processing, not sequence labeling."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "In the simulation, when filling the Viterbi table for the second word onwards, what is the correct formula for computing V[i][j]?",
+      "answers": {
+        "a": "V[i][j] = max_k(V[k][j-1] × transition[k][i]) × emission[i][word_j]",
+        "b": "V[i][j] = V[i][j-1] × emission[i][word_j]",
+        "c": "V[i][j] = emission[i][word_j] × transition[i][j]",
+        "d": "V[i][j] = sum_k(V[k][j-1]) × emission[i][word_j]"
+      },
+      "explanations": {
+        "a": "Correct! This formula captures the essence of Viterbi: find the maximum probability path from any previous tag k, multiply by transition probability, then by emission probability for the current word-tag pair.",
+        "b": "Incorrect. This ignores the need to consider all possible previous tags and their transition probabilities.",
+        "c": "Incorrect. This doesn't account for previous state probabilities or the proper indexing of transition probabilities.",
+        "d": "Incorrect. We need the maximum (max), not the sum, and this doesn't include transition probabilities."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Based on your experience with the simulation, what happens when you encounter a word that has zero emission probability for all tags?",
+      "answers": {
+        "a": "The cell is marked as 'N/A' and effectively removed from consideration",
+        "b": "The algorithm assigns a random probability",
+        "c": "The simulation crashes",
+        "d": "All tags get equal probability"
+      },
+      "explanations": {
+        "a": "Correct! In the simulation, when there's no training data for a word-tag combination, the cell shows 'N/A' indicating the path is impossible, which correctly reflects the mathematical constraint.",
+        "b": "Incorrect. The algorithm doesn't assign random values; it uses the training data probabilities.",
+        "c": "Incorrect. The simulation handles this case gracefully with 'N/A' markers.",
+        "d": "Incorrect. Equal probabilities aren't assigned; the impossible combinations are marked as unavailable."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "What insight does the 'Show Answer' feature provide about your understanding of the Viterbi computation?",
+      "answers": {
+        "a": "It helps identify whether errors are in probability lookup, arithmetic computation, or algorithmic understanding",
+        "b": "It shows only the final tag sequence",
+        "c": "It displays the training corpus",
+        "d": "It generates new test sentences"
+      },
+      "explanations": {
+        "a": "Correct! The color-coded comparison (red for incorrect, green for correct) helps learners pinpoint whether they made errors in reading the probability matrices, performing calculations, or understanding the algorithm logic.",
+        "b": "Incorrect. The feature shows detailed cell-by-cell comparisons, not just the final result.",
+        "c": "Incorrect. The training corpus is shown separately; this feature focuses on Viterbi table validation.",
+        "d": "Incorrect. The feature is for validation, not generation of new content."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "From your experience with different corpora, what can you conclude about the relationship between training data and decoding outcomes?",
+      "answers": {
+        "a": "Different training corpora lead to different probability distributions, affecting which tag sequences are considered most likely",
+        "b": "All corpora produce identical results regardless of content",
+        "c": "Larger corpora always produce better results",
+        "d": "The choice of corpus doesn't matter for the algorithm"
+      },
+      "explanations": {
+        "a": "Correct! Each corpus reflects different linguistic patterns and word usage, resulting in distinct emission and transition probabilities that directly influence the optimal tag sequences identified by Viterbi.",
+        "b": "Incorrect. Different training data necessarily produces different probability matrices and thus different decoding results.",
+        "c": "Incorrect. Size alone doesn't determine quality; the representativeness and diversity of the training data matter more.",
+        "d": "Incorrect. The corpus fundamentally determines the probability matrices that drive the algorithm's decisions."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "When using the simulation's hint feature, what key algorithmic insight does it emphasize about Viterbi computation?",
+      "answers": {
+        "a": "Each cell depends on the maximum value from the previous column, not the sum or average",
+        "b": "All cells should be filled with random values",
+        "c": "Only emission probabilities matter",
+        "d": "The algorithm works backwards from the last word"
+      },
+      "explanations": {
+        "a": "Correct! The hints emphasize the 'max' operation that is central to Viterbi, distinguishing it from algorithms that might sum probabilities (like forward algorithm) or average them.",
+        "b": "Incorrect. The algorithm is deterministic and based on mathematical optimization, not randomness.",
+        "c": "Incorrect. Both emission and transition probabilities are crucial for optimal decoding.",
+        "d": "Incorrect. While backtracking goes backwards, the main computation (filling the table) proceeds forwards."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Consider the sentence 'Book a park' from Corpus A. If you manually changed the emission probability of P(park|verb) from 0.1 to 0.8, how would this likely affect the Viterbi decoding result?",
+      "answers": {
+        "a": "The algorithm might now prefer 'park' as a verb rather than a noun, potentially changing the entire optimal sequence",
+        "b": "No change would occur since transition probabilities matter more",
+        "c": "Only the last word's tag would change",
+        "d": "The algorithm would become non-deterministic"
+      },
+      "explanations": {
+        "a": "Correct! Significantly increasing P(park|verb) would make the verb interpretation much more attractive, potentially changing not just the tag for 'park' but also affecting earlier decisions due to transition probability interactions.",
+        "b": "Incorrect. Both emission and transition probabilities are important; a large change in emission probability can definitely affect the outcome.",
+        "c": "Incorrect. Due to the sequential nature and transition dependencies, changing one word's probabilities can affect the entire optimal path.",
+        "d": "Incorrect. The algorithm remains deterministic; it would just find a different optimal path based on the new probabilities."
+      },
+      "correctAnswer": "a",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "What computational advantage does the Viterbi algorithm provide compared to exhaustively checking all possible tag sequences?",
+      "answers": {
+        "a": "It reduces complexity from exponential O(T^N) to polynomial O(N×T²), making it practical for real applications",
+        "b": "It produces more accurate results than exhaustive search",
+        "c": "It requires less memory than other approaches",
+        "d": "It can handle infinite vocabulary sizes"
+      },
+      "explanations": {
+        "a": "Correct! Without dynamic programming, we'd need to evaluate T^N possible sequences (T tags for each of N words). Viterbi reduces this to O(N×T²) by storing and reusing optimal subproblems.",
+        "b": "Incorrect. Viterbi finds the same optimal solution as exhaustive search, but much more efficiently.",
+        "c": "Incorrect. While memory usage is polynomial rather than exponential, the main advantage is time complexity.",
+        "d": "Incorrect. The algorithm's complexity depends on vocabulary size; infinite vocabulary would still be problematic."
+      },
+      "correctAnswer": "a",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "Based on your simulation experience, why is it crucial to understand both the mathematical foundations and practical implementation of the Viterbi algorithm?",
+      "answers": {
+        "a": "Mathematical understanding ensures correct implementation, while hands-on practice reveals edge cases and real-world constraints",
+        "b": "Only mathematical knowledge is important for algorithm design",
+        "c": "Only practical experience matters for software development",
+        "d": "The two aspects are completely independent"
+      },
+      "explanations": {
+        "a": "Correct! The simulation demonstrates that mathematical rigor ensures algorithmic correctness (proper formula application), while practical implementation reveals issues like handling zero probabilities, numerical precision, and user interface design for educational tools.",
+        "b": "Incorrect. Practical implementation often reveals considerations not apparent in pure mathematical formulation.",
+        "c": "Incorrect. Without mathematical understanding, implementations may contain subtle errors or miss optimization opportunities.",
+        "d": "Incorrect. Mathematical theory and practical implementation are deeply interconnected in algorithm development."
+      },
+      "correctAnswer": "a",
+      "difficulty": "advanced"
+    }
+  ]
+}
