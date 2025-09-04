@@ -38,8 +38,8 @@
     {
       "question": "What information does the emission matrix provide in HMM-based POS tagging?",
       "answers": {
-        "a": "P(word | POS tag) - the probability of observing a word given a POS tag",
-        "b": "P(POS tag | word) - the probability of a POS tag given a word",
+        "a": "P( word | POS tag ) - the probability of observing a word given a POS tag",
+        "b": "P( POS tag | word ) - the probability of a POS tag given a word",
         "c": "The frequency of words in the training corpus",
         "d": "The order of words in a sentence"
       },
@@ -53,10 +53,10 @@
       "difficulty": "beginner"
     },
     {
-      "question": "What does the transition matrix represent in the context of POS tagging?",
+      "question": "What does the transition matrix represent in the context of POS tagging?<br>Choose the best option:",
       "answers": {
-        "a": "P(tag_i | tag_i-1) - the probability of transitioning from one POS tag to another",
-        "b": "P(word_i | word_i-1) - the probability of one word following another",
+        "a": "P(tag_i | tag_{i-1}) - the probability of transitioning from one POS tag to another",
+        "b": "P(word_i | word_{i-1}) - the probability of one word following another",
         "c": "The total number of tags in the tagset",
         "d": "The length of the training sentences"
       },
@@ -70,7 +70,7 @@
       "difficulty": "intermediate"
     },
     {
-      "question": "What is the key computational technique that makes the Viterbi algorithm efficient?",
+      "question": "What is the key computational technique that makes the Viterbi algorithm efficient?<br>Choose the best option:",
       "answers": {
         "a": "Dynamic programming",
         "b": "Brute force search",
@@ -87,7 +87,7 @@
       "difficulty": "intermediate"
     },
     {
-      "question": "In the Viterbi algorithm, what does each cell V[i][j] in the Viterbi table represent?",
+      "question": "In the Viterbi algorithm, what does each cell V[i][j] in the Viterbi table represent?<br>Choose the best option:",
       "answers": {
         "a": "The maximum probability of any tag sequence ending in tag i at word position j",
         "b": "The emission probability of word j given tag i",

@@ -1,181 +1,200 @@
-Part-of-Speech (POS) tagging is a fundamental sequence labeling task in Natural Language Processing that assigns grammatical categories to words in context. The **Viterbi algorithm** provides an elegant dynamic programming solution to find the most probable sequence of POS tags using Hidden Markov Models.
+Sequence decoding is a fundamental process in computational linguistics and Natural Language Processing (NLP) that involves finding the most probable sequence of hidden states (such as POS tags) given a sequence of observed words. The Viterbi algorithm is the standard dynamic programming solution for this task, especially when using Hidden Markov Models (HMMs).
 
 ---
 
-#### 1. Hidden Markov Models for POS Tagging
+### What is Viterbi Decoding?
 
-A Hidden Markov Model for POS tagging consists of:
+Viterbi decoding is the computational process of determining the most likely sequence of hidden states (tags) for a given sequence of observations (words), using:
 
-- **Hidden States (S)**: POS tags {Noun, Verb, Adjective, Determiner, ...}
-- **Observable Symbols (O)**: Words in the vocabulary {the, cat, runs, quickly, ...}
-- **Transition Probabilities (A)**: P(tag_j | tag_i) - likelihood of tag sequence
-- **Emission Probabilities (B)**: P(word | tag) - likelihood of word given tag
-- **Initial Probabilities (π)**: P(tag) - probability of starting with a tag
+- **Emission probabilities**: Likelihood of a word given a tag
+- **Transition probabilities**: Likelihood of a tag following another tag
+- **Initial probabilities**: Likelihood of starting with a particular tag
+
+The algorithm efficiently computes the optimal path through a trellis (table) using dynamic programming.
 
 ---
+
+### Core Components
+
+#### 1. Hidden Markov Model (HMM)
+
+An HMM for POS tagging consists of:
+
+- **Hidden States (Tags)**: e.g., Noun, Verb, Adjective, Determiner
+- **Observations (Words)**: e.g., "the", "cat", "runs"
+- **Transition Probabilities**: P(tag₂ | tag₁)
+- **Emission Probabilities**: P(word | tag)
+- **Initial Probabilities**: P(tag₁)
 
 #### 2. The Decoding Problem
 
-Given a sequence of words **W = w₁, w₂, ..., wₙ** and HMM parameters **(A, B, π)**, find the most likely tag sequence **T\* = t₁, t₂, ..., tₙ** such that:
+Given a sequence of words **W = w₁, w₂, ..., wₙ** and HMM parameters, find the most likely tag sequence **T\*** = t₁, t₂, ..., tₙ:
 
-**T\* = argmax P(T | W)**
+<div align="center">
 
-Using Bayes' theorem and the Markov assumption:
+$$
+T^* = \arg\max_{T} P(T \mid W)
+$$
 
-**T\* = argmax ∏ᵢ₌₁ⁿ P(wᵢ | tᵢ) × P(tᵢ | tᵢ₋₁)**
+</div>
+
+Using the Markov and output independence assumptions, this becomes:
+
+<div align="center">
+
+$$
+T^* = \arg\max_{T} \prod_{i=1}^n P(w_i \mid t_i) \times P(t_i \mid t_{i-1})
+$$
+
+</div>
 
 ---
 
-#### 3. Viterbi Algorithm: Dynamic Programming Solution
+### Viterbi Algorithm: Dynamic Programming Solution
 
-The Viterbi algorithm solves this optimization problem efficiently using dynamic programming principles.
-
-#### **Mathematical Foundation**
+#### Mathematical Foundation
 
 For each word position **j** and tag **s**, we compute:
 
-**V[s][j] = max*{s'} (V[s'][j-1] × a*{s',s}) × b_s(wⱼ)**
+<div align="center">
+
+$$
+V[s][j] = \max_{s'} \left( V[s'][j-1] \times a_{s',s} \right) \times b_s(w_j)
+$$
+
+</div>
 
 Where:
 
 - **V[s][j]**: Maximum probability of any tag sequence ending in state **s** at position **j**
 - **a\_{s',s}**: Transition probability from tag **s'** to tag **s**
-- **b_s(wⱼ)**: Emission probability of word **wⱼ** given tag **s**
-
-#### **Algorithm Steps**
-
-##### 1. **Initialization** (j = 1)
-
-```
-V[s][1] = π[s] × b_s(w₁)
-Path[s][1] = 0
-```
-
-##### 2. **Recursion** (j = 2 to N)
-
-```
-For each state s:
-    V[s][j] = max_{s'} (V[s'][j-1] × a_{s',s}) × b_s(wⱼ)
-    Path[s][j] = argmax_{s'} (V[s'][j-1] × a_{s',s})
-```
-
-##### 3. **Termination**
-
-```
-P* = max_s V[s][N]
-q*_N = argmax_s V[s][N]
-```
-
-##### 4. **Backtracking** (j = N-1 to 1)
-
-```
-q*_j = Path[q*_{j+1}][j+1]
-```
+- **b_s(w_j)**: Emission probability of word **w_j** given tag **s**
 
 ---
 
-#### 4. Example Walkthrough
+#### Algorithm Steps
 
-Consider tagging **"Book that flight"** with tags {Noun, Verb, Det}:
+#### 1. Initialization (j = 1)
 
-#### **Probability Matrices**
+<div align="center">
 
-**Emission Matrix P(word|tag):**
+$$
+V[s][1] = \pi[s] \times b_s(w_1)
+$$
 
-```
-         Book   that   flight
-Noun     0.3    0.1    0.8
-Verb     0.7    0.0    0.1
-Det      0.0    0.9    0.0
-```
+</div>
 
-**Transition Matrix P(tag_j|tag_i):**
+#### 2. Recursion (j = 2 \ldots n)
 
-```
-         Noun   Verb   Det
-Noun     0.2    0.1    0.6
-Verb     0.5    0.2    0.3
-Det      0.8    0.2    0.0
-```
+For each state **s**:
 
-#### **Viterbi Table Computation**
+<div align="center">
 
-**Time t=1 (Book):**
+$$
+V[s][j] = \max_{s'} \left( V[s'][j-1] \times a_{s',s} \right) \times b_s(w_j)
+$$
 
-- V[Noun][1] = 0.33 × 0.3 = 0.10
-- V[Verb][1] = 0.33 × 0.7 = 0.23
-- V[Det][1] = 0.33 × 0.0 = 0.00
+</div>
 
-**Time t=2 (that):**
+#### 3. Termination
 
-- V[Noun][2] = max(0.10×0.2, 0.23×0.5, 0.00×0.8) × 0.1 = 0.0115
-- V[Verb][2] = max(0.10×0.1, 0.23×0.2, 0.00×0.2) × 0.0 = 0.0
-- V[Det][2] = max(0.10×0.6, 0.23×0.3, 0.00×0.0) × 0.9 = 0.0621
+<div align="center">
 
-**Time t=3 (flight):**
+$$
+P^* = \max_s V[s][n]
+$$
 
-- V[Noun][3] = max(0.0115×0.2, 0.0×0.5, 0.0621×0.8) × 0.8 = 0.0398
-- V[Verb][3] = max(0.0115×0.1, 0.0×0.2, 0.0621×0.2) × 0.1 = 0.0001
-- V[Det][3] = max(0.0115×0.6, 0.0×0.3, 0.0621×0.0) × 0.0 = 0.0
+$$
+q^*_n = \arg\max_s V[s][n]
+$$
 
-**Optimal Path**: Verb → Det → Noun = "Book that flight"
+</div>
 
----
+#### 4. Backtracking
 
-#### 5. Computational Complexity
+For **j = n-1** to **1**:
 
-- **Time Complexity**: O(N × T²) where N = sentence length, T = number of tags
-- **Space Complexity**: O(N × T) for the Viterbi table
+<div align="center">
 
-**Comparison**: Without dynamic programming, finding optimal path requires O(T^N) time, making Viterbi essential for practical applications.
+$$
+q^*_j = \text{Path}[q^*_{j+1}][j+1]
+$$
+
+</div>
 
 ---
 
-#### 6. Key Insights
+### Example Walkthrough
 
-#### **Optimal Substructure**
+**Sentence:** "Book that flight"  
+**Tags:** {Noun, Verb, Det}
 
-The optimal solution contains optimal solutions to subproblems - crucial for dynamic programming.
+**Emission Matrix P(word | tag):**
 
-#### **Markov Property**
+|      | Book | that | flight |
+| ---- | ---- | ---- | ------ |
+| Noun | 0.3  | 0.1  | 0.8    |
+| Verb | 0.7  | 0.0  | 0.1    |
+| Det  | 0.0  | 0.9  | 0.0    |
 
-Current tag depends only on the previous tag, not the entire history: P(tᵢ | t₁...tᵢ₋₁) = P(tᵢ | tᵢ₋₁)
+**Transition Matrix P(tag₂ | tag₁):**
 
-#### **Probability Balance**
+|      | Noun | Verb | Det |
+| ---- | ---- | ---- | --- |
+| Noun | 0.2  | 0.1  | 0.6 |
+| Verb | 0.5  | 0.2  | 0.3 |
+| Det  | 0.8  | 0.2  | 0.0 |
 
-The algorithm optimally balances:
+**Viterbi Table Computation:**
 
-- **Local compatibility**: How well words fit their tags (emission probabilities)
-- **Global coherence**: How well tag sequences flow together (transition probabilities)
+- **Time t=1 (Book):**
+
+  - V[Noun][1] = 0.33 × 0.3 = 0.10
+  - V[Verb][1] = 0.33 × 0.7 = 0.23
+  - V[Det][1] = 0.33 × 0.0 = 0.00
+
+- **Time t=2 (that):**
+
+  - V[Noun][2] = max(0.10×0.2, 0.23×0.5, 0.00×0.8) × 0.1 = 0.0115
+  - V[Verb][2] = max(0.10×0.1, 0.23×0.2, 0.00×0.2) × 0.0 = 0.0
+  - V[Det][2] = max(0.10×0.6, 0.23×0.3, 0.00×0.0) × 0.9 = 0.0621
+
+- **Time t=3 (flight):**
+  - V[Noun][3] = max(0.0115×0.2, 0.0×0.5, 0.0621×0.8) × 0.8 = 0.0398
+  - V[Verb][3] = max(0.0115×0.1, 0.0×0.2, 0.0621×0.2) × 0.1 = 0.0001
+  - V[Det][3] = max(0.0115×0.6, 0.0×0.3, 0.0621×0.0) × 0.0 = 0.0
+
+**Optimal Path:** Verb → Det → Noun = "Book that flight"
 
 ---
 
-#### 7. Applications Beyond POS Tagging
+### Key Insights
 
-- **Speech Recognition**: Finding most likely word sequences from acoustic signals
-- **Bioinformatics**: Gene sequence analysis and protein structure prediction
-- **Named Entity Recognition**: Identifying person, location, organization mentions
-- **Machine Translation**: Word alignment between source and target languages
-- **Information Extraction**: Structured data extraction from unstructured text
+- **Optimal Substructure:** The best solution contains best solutions to subproblems.
+- **Markov Property:** Each tag depends only on the previous tag.
+- **Probability Balance:** The algorithm balances local (emission) and global (transition) probabilities.
 
 ---
 
-#### 8. Practical Considerations
+### Applications Beyond POS Tagging
 
-#### **Smoothing Techniques**
+- Speech Recognition
+- Bioinformatics (gene/protein sequence analysis)
+- Named Entity Recognition
+- Machine Translation
+- Information Extraction
 
-Handle unseen word-tag combinations using:
+---
 
-- Add-one (Laplace) smoothing
-- Good-Turing estimation
-- Back-off models
+### Practical Considerations
 
-#### **Unknown Words**
+- **Smoothing:** Handle unseen word-tag pairs (Laplace, Good-Turing, back-off).
+- **Unknown Words:** Use morphological analysis, character features, or embeddings.
 
-Strategies for out-of-vocabulary words:
+---
 
-- Morphological analysis
-- Character-level features
-- Word embeddings
+### Conclusion
 
-The Viterbi algorithm remains a cornerstone of sequence labeling, providing both theoretical elegance and practical efficiency for natural language processing tasks.
+The Viterbi algorithm is a cornerstone of sequence labeling in NLP, providing an efficient and mathematically sound method for decoding the most probable sequence of tags. This experiment lets you practice filling Viterbi tables and understanding dynamic programming in real-world POS tagging.
+
+<img src="images/viterbi-4.gif" alt="Viterbi Decoding Animation" style="display:block;margin:auto;max-width:400px;">
