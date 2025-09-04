@@ -14,21 +14,21 @@
 
 **Emission Matrix P(word|tag):**
 
-```
+<pre>
          The    dog    runs
 Noun     0.1    0.6    0.1
 Verb     0.0    0.1    0.8
 Det      0.9    0.0    0.0
-```
+</pre>
 
 **Transition Matrix P(tag_j|tag_i):**
 
-```
+<pre>
          Noun   Verb   Det
 Noun     0.3    0.4    0.1
 Verb     0.4    0.1    0.2
 Det      0.7    0.2    0.1
-```
+</pre>
 
 Assume equal initial probabilities π[tag] = 1/3 for all tags.
 
