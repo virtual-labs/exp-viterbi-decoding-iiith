@@ -19,7 +19,7 @@
       "difficulty": "beginner"
     },
     {
-      "question": "In the simulation, when filling the Viterbi table for the second word onwards, what is the correct formula for computing V[i][j]?",
+      "question": "In the simulation, when filling the Viterbi table for the second word onwards,<br>what is the correct formula for computing V[i][j]?<br>Choose the best option:",
       "answers": {
         "a": "V[i][j] = max_k(V[k][j-1] × transition[k][i]) × emission[i][word_j]",
         "b": "V[i][j] = V[i][j-1] × emission[i][word_j]",
