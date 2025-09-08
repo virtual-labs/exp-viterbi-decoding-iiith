@@ -234,7 +234,7 @@ $(document).ready(function () {
       $("#sim-hint").hide();
       // Load and render the new corpus
       $.ajax({
-        url: "data/" + selected,
+        url: "data/" + selected + ".txt",
         dataType: "text",
         success: function (data) {
           const corpusObj = parseCorpus(data);
