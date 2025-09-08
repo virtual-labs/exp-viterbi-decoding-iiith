@@ -1,0 +1,17 @@
+[
+  {
+    "filename": "corpus1",
+    "label": "Corpus A",
+    "preview": "Book a car. Park the car. The book is in the car. The car is in a park."
+  },
+  {
+    "filename": "corpus2",
+    "label": "Corpus B",
+    "preview": "The quick brown fox jumps over the lazy dog."
+  },
+  {
+    "filename": "corpus3",
+    "label": "Corpus C",
+    "preview": "She sells sea shells by the sea shore."
+  }
+] 
